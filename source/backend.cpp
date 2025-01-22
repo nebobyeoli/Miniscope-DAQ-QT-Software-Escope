@@ -1,7 +1,7 @@
 #include "backend.h"
 #include <QDebug>
-#include <QFileDialog>
-#include <QApplication>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -19,7 +19,9 @@
 #include <QModelIndex>
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
@@ -49,8 +51,7 @@ backEnd::backEnd(QObject *parent) :
     m_userConfigFileName = "./userConfigs/UserConfigExample.json";
 //    loadUserConfigFile();
     handleUserConfigFileNameChanged();
-
-//    setUserConfigOK(true);
+    //setUserConfigOK(true);
 #endif
     m_softwareStartTime = QDateTime().currentMSecsSinceEpoch();
 
@@ -716,8 +717,9 @@ void backEnd::testCodecSupport()
 {
     // This function will test which codecs are supported on host's machine
     cv::VideoWriter testVid;
-//    testVid.open("test.avi", -1,20, cv::Size(640, 480), true);
+    //testVid.open("test.avi", -1,20, cv::Size(640, 480), true); //2024.08.29 deactivate as normal
     QVector<QString> possibleCodec({"DIB ", "MJPG", "MJ2C", "XVID", "FFV1", "DX50", "FLV1", "H264", "I420","MPEG","mp4v", "0000", "LAGS", "ASV1", "GREY"});
+    //QVector<QString> possibleCodec({"MJPG", "MJ2C", "XVID", "FFV1", "DX50", "FLV1", "I420","MPEG","mp4v", "ASV1", "GREY"});
     for (int i = 0; i < possibleCodec.length(); i++) {
         testVid.open("test.avi", cv::VideoWriter::fourcc(possibleCodec[i].toStdString()[0],possibleCodec[i].toStdString()[1],possibleCodec[i].toStdString()[2],possibleCodec[i].toStdString()[3]),
                 20, cv::Size(640, 480), true);

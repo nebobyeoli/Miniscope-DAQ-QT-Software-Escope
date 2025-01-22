@@ -1,21 +1,21 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick // import QtQuick 2.0
+import QtQuick.Controls // import QtQuick.Controls 1.4
     import QtQuick.Controls 2.12 as QTQC2
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
+// import QtQuick.Controls.Styles 1.4
 
 TreeView {
     property string toolTipText
     id:root
-    rowDelegate: Rectangle {
+    delegate: Rectangle {    // rowDelegate: Rectangle {
             width: parent.width
             height: 25
 
         }
 
-    TableViewColumn {
-        title: "Key"
-        role: "key"
+    TableView { // TableViewColumn {
+        //title: "Key"
+        //role: "key"
         width: 200
 
         delegate: Loader {
@@ -58,9 +58,9 @@ TreeView {
         }
     }
 
-    TableViewColumn {
-        title: "Value"
-        role: "value"
+    TableView { // TableViewColumn {
+        //title: "Value"
+        //role: "value"
         width: 400
         delegate: Loader {
             property string modelValue: model.value
@@ -81,9 +81,9 @@ TreeView {
         }
     }
 
-    TableViewColumn {
-        title: "Type"
-        role: "type"
+    TableView { // TableViewColumn {
+        //title: "Type"
+        //role: "type"
         width: 90
         delegate: Loader {
             property string modelType: model.type
@@ -177,8 +177,8 @@ TreeView {
                 }
             property var validInt : IntValidator { bottom:0;}
             property var validDouble : DoubleValidator { bottom:0;}
-            property var validPath : RegExpValidator{regExp: /^[^\\]+$/}
-            property var validAll : RegExpValidator{}
+            property var validPath : RegularExpressionValidator{regularExpression: /^[^\\]+$/} //RegExpValidator{regExp: /^[^\\]+$/}
+            property var validAll : RegularExpressionValidator{} // RegExpValidator{}
 
             validator: {
 

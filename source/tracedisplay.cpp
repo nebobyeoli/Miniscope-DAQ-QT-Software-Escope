@@ -10,10 +10,10 @@
 #include <QtMath>
 
 #include <QtQuick/qquickwindow.h>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLContext>
-#include <QtGui/QOpenGLTexture>
-#include <QtGui/QOpenGLFramebufferObject>
+#include <QtOpenGL/QOpenGLTexture>
+#include <QtOpenGL/QOpenGLFramebufferObject>
 
 TraceDisplayBackend::TraceDisplayBackend(QObject *parent, QJsonObject ucTraceDisplay, qint64 softwareStartTime):
     QObject(parent),
@@ -92,7 +92,7 @@ TraceDisplay::TraceDisplay()
 void TraceDisplay::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        lastMouseClickEvent = new QMouseEvent(*event);
+        //lastMouseClickEvent = new QMouseEvent(*event);
     }
 //    qDebug() << "Mouse Press" << event;
 }
@@ -122,7 +122,7 @@ void TraceDisplay::mouseMoveEvent(QMouseEvent *event)
 void TraceDisplay::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        lastMouseReleaseEvent = new QMouseEvent(*event);
+        //lastMouseReleaseEvent = new QMouseEvent(*event);
         lastMouseMoveEvent = nullptr;
     }
 //    qDebug() << "Mouse Release" << event;
@@ -251,7 +251,7 @@ void TraceDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-        win->setClearBeforeRendering(false);
+        //win->setClearBeforeRendering(false);
     }
 }
 
@@ -992,7 +992,7 @@ void TraceDisplayRenderer::paint()
 
 //    // Not strictly needed for this example, but generally useful for when
 //    // mixing with raw OpenGL.
-    m_window->resetOpenGLState();
+    //m_window->resetOpenGLState();
 
 }
 

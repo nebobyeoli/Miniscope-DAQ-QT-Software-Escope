@@ -4,11 +4,11 @@
 #include "newquickview.h"
 
 #include <QtQuick/QQuickItem>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLTexture>
-#include <QtGui/QOpenGLBuffer>
-#include <QtGui/QOpenGLFramebufferObject>
+#include <QtOpenGL/QOpenGLTexture>
+#include <QtOpenGL/QOpenGLBuffer>
+#include <QtOpenGL/QOpenGLFramebufferObject>
 
 #include <QJsonObject>
 #include <QVector>

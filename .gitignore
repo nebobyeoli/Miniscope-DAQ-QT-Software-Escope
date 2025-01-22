@@ -67,7 +67,8 @@ Thumbs.db
 *.pyc
 
 # Builds
-build-*
+# build-*
+build*
 
 # Binaries
 # --------

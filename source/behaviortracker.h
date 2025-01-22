@@ -8,11 +8,11 @@
 #include <opencv2/opencv.hpp>
 
 #include <QtQuick/QQuickItem>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLTexture>
-#include <QtGui/QOpenGLBuffer>
-#include <QtGui/QOpenGLFramebufferObject>
+#include <QtOpenGL/QOpenGLTexture>
+#include <QtOpenGL/QOpenGLBuffer>
+#include <QtOpenGL/QOpenGLFramebufferObject>
 
 #include <QObject>
 #include <QJsonObject>
@@ -20,7 +20,7 @@
 #include <QMap>
 #include <QString>
 #include <QDebug>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QThread>
 #include <QSemaphore>
 

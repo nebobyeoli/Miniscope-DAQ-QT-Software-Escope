@@ -2,8 +2,8 @@
 #include "newquickview.h"
 #include "videodisplay.h"
 
-#include <QQuickView>
-#include <QQuickItem>
+#include <QtQuick/QQuickView>
+#include <QtQuick/QQuickItem>
 #include <QSemaphore>
 #include <QObject>
 #include <QTimer>
@@ -11,7 +11,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
-#include <QQmlApplicationEngine>
+#include <QtQml/QQmlApplicationEngine>
 #include <QVector>
 #include <QVariant>
 

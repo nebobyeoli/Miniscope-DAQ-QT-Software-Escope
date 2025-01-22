@@ -1,7 +1,7 @@
-QT += qml quick widgets
+QT += qml quick widgets gui core
 CONFIG += c++11
 
-QT += 3dcore
+#QT += 3dcore
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -36,7 +36,7 @@ SOURCES += \
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = .  # absolute path: [PROJECT_FOLDER_DIRECTORY]/source
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -64,7 +64,6 @@ HEADERS += \
     videostreamocv.h
 
 DISTFILES += \
-    ../Python/DLCwrapper.py \
     ../Scripts/DLCwrapper.py \
     ../deviceConfigs/behaviorCams.json \
     ../deviceConfigs/miniscopes.json \
@@ -73,12 +72,12 @@ DISTFILES += \
 
 win32 {
     # Path to your openCV .lib file(s)
-    LIBS += -LC:/opencv-4.4.0/build/lib/Release -lopencv_world440
+    LIBS += -LC:/opencv4.10.0_MinGW\install\x64\mingw\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d
 
 #    LIBS += -LC:/opencv-4.4.0/build/lib/Debug -lopencv_world440d
 
     # Path to openCV header files
-    INCLUDEPATH += C:/opencv-4.4.0/build/install/include
+    INCLUDEPATH += C:/opencv4.10.0_MinGW/install/include
 
     # Do we need DEPENDPATH ????
 #    #DEPENDPATH +=
@@ -91,15 +90,15 @@ win32 {
 #    INCLUDEPATH += C:/libusb-1.0.23/include/libusb-1.0
 
     # For Python
-#    INCLUDEPATH += C:/Python38/include
-#    LIBS += -LC:/Python38/libs -lpython38
-
-    INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/include
-    LIBS += -LC:/Users/dbaha/.conda/envs/basepy37/libs -lpython37
+    INCLUDEPATH += C:/Python/Python311/include
+    LIBS += -LC:/Python/Python311/libs -lpython311
+    #C:\Users\LAb\AppData\Local\Programs\Python\Python311
+#    INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/include
+#    LIBS += -LC:/Users/dbaha/.conda/envs/basepy37/libs -lpython37
 
     # For numpy
-    INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/Lib/site-packages/numpy/core/include
-
+    INCLUDEPATH += C:/Python/Python311/Lib/site-packages/numpy
+    INCLUDEPATH += C:/Python/Python311/Lib/site-packages/numpy/_core/include
 } else {
     CONFIG += link_pkgconfig
     PKGCONFIG += opencv4

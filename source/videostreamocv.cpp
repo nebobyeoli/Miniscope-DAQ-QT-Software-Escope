@@ -1,4 +1,6 @@
 #include "videostreamocv.h"
+
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
@@ -19,7 +21,7 @@ VideoStreamOCV::VideoStreamOCV(QObject *parent, int width, int height, double pi
     m_stopStreaming(false),
     m_headOrientationStreamState(false),
     m_headOrientationFilterState(false),
-    m_isColor(false),
+    m_isColor(true),
     m_trackExtTrigger(false),
     m_expectedWidth(width),
     m_expectedHeight(height),
@@ -249,6 +251,7 @@ void VideoStreamOCV::startStream()
                 }
                 else {
                     //                            frame = cv::repeat(frame,4,4);
+                    sendMessage("Warning: " + m_deviceName + " status frame grabbed, m_isColor=false. (startStream)");
                     cv::cvtColor(frame, frameBuffer[idx%frameBufferSize], cv::COLOR_BGR2GRAY);
                 }
                 // qDebug() << "Frame Number:" << *m_acqFrameNum - cam->get(cv::CAP_PROP_CONTRAST);

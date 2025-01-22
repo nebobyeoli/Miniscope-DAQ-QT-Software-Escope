@@ -2,8 +2,8 @@
 #include "newquickview.h"
 #include "videodisplay.h"
 
-#include <QQuickView>
-#include <QQuickItem>
+#include <QtQuick/QQuickView>
+#include <QtQuick/QQuickItem>
 #include <QSemaphore>
 #include <QObject>
 #include <QTimer>
@@ -11,8 +11,9 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
-#include <QQmlApplicationEngine>
+#include <QtQml/QQmlApplicationEngine>
 #include <QVector>
+#include <Qfile>
 
 VideoDevice::VideoDevice(QObject *parent, QJsonObject ucDevice, qint64 softwareStartTime) :
     QObject(parent),
@@ -65,7 +66,8 @@ VideoDevice::VideoDevice(QObject *parent, QJsonObject ucDevice, qint64 softwareS
     // ==========
     deviceStream->setHeadOrientationConfig(m_headOrientationStreamState, m_headOrientationFilterState);
 
-    deviceStream->setIsColor(m_cDevice["isColor"].toBool(false));
+    //deviceStream->setIsColor(m_cDevice["isColor"].toBool(false));
+    deviceStream->setIsColor(true);
 
     qDebug() << m_ucDevice;
     if (m_ucDevice.contains("deviceID") && !m_ucDevice["deviceID"].isNull()) {

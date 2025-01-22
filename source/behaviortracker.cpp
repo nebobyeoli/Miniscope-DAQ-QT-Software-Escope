@@ -1,16 +1,16 @@
 #include "behaviortracker.h"
 #include "newquickview.h"
-//#include "videodisplay.h"
+#include "videodisplay.h"
 #include "behaviortrackerworker.h"
 
 #include <opencv2/opencv.hpp>
 
 #include <QtQuick/QQuickItem>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLTexture>
-#include <QtGui/QOpenGLBuffer>
-#include <QtGui/QOpenGLFramebufferObject>
+#include <QtOpenGL/QOpenGLTexture>
+#include <QtOpenGL/QOpenGLBuffer>
+#include <QtOpenGL/QOpenGLFramebufferObject>
 
 #include <QJsonObject>
 #include <QDebug>
@@ -18,7 +18,7 @@
 #include <QObject>
 #include <QGuiApplication>
 #include <QScreen>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QThread>
 #include <QJsonArray>
 #include <QtMath>
@@ -840,7 +840,7 @@ void TrackerDisplayRenderer::paint()
 
     // Not strictly needed for this example, but generally useful for when
     // mixing with raw OpenGL.
-    m_window->resetOpenGLState();
+    //m_window->resetOpenGLState();
 }
 
 TrackerDisplay::TrackerDisplay():
@@ -930,7 +930,7 @@ void TrackerDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-        win->setClearBeforeRendering(false);
+        //win->setClearBeforeRendering(false);
     }
 }
 

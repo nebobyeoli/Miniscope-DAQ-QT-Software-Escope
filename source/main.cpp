@@ -1,10 +1,10 @@
-#include <QGuiApplication>
-#include <QApplication>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QDebug>
+#include <QtGui/QGuiApplication>
+#include <QtWidgets/QApplication>
+#include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
+#include <QtCore/QDebug>
 #include <QObject>
-#include <QTreeView>
+#include <QtWidgets/QTreeView>
 
 #include <QThreadPool>
 

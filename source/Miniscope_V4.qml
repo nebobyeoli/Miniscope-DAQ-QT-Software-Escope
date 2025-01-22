@@ -16,7 +16,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_H) {
-            if (root.state == "controlsShown")
+            if (root.state === "controlsShown")
                 root.state = "controlsHidden";
             else
                 root.state = "controlsShown";
@@ -36,7 +36,7 @@ Item {
         objectName: "vD"
 
         property var sumAcqFPS: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        property var idx: 0
+        property int idx: 0
         onAcqFPSChanged: {
 
             sumAcqFPS[idx] = videoDisplay.acqFPS;

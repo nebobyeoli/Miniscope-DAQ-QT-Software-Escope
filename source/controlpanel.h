@@ -4,7 +4,7 @@
 #include "newquickview.h"
 
 #include <QObject>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QJsonObject>
 #include <QTimer>
 

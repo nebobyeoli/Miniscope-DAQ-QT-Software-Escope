@@ -9,10 +9,9 @@
 #include <QTimer>
 #include <QAtomicInt>
 #include <QJsonObject>
-#include <QQuickView>
+#include <QtQuick/QQuickView>
 #include <QMap>
-#include <QVector>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QVariant>
 #include <QString>
 

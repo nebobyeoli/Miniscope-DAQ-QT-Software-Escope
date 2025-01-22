@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QGuiApplication>
 #include <QScreen>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QJsonObject>
 #include <QString>
 #include <QTimer>

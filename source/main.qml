@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls //2.12
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs //import QtQuick.Dialogs 1.2
+import QtQuick.Controls.Basic
 
 Window {
     id: root
@@ -20,7 +21,7 @@ Window {
 
         id: fileDialog
         title: "Please choose a user configuration file."
-        folder: shortcuts.home
+        currentFolder: 'QStandardPaths::HomeLocation'
         nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
             // Send file name to c++ backend
@@ -47,7 +48,7 @@ Window {
 
             TextArea {
                 text: "Miniscope DAQ Software version " + backend.versionNumber + "<br/>" +
-                      "Your OpenGL verions: " + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion + "<br/>" +
+                      "Your OpenGL verions: " + GraphicsInfo.majorVersion + "." + GraphicsInfo.minorVersion + "<br/>" +
                       "Developed by the <a href='https://aharoni-lab.github.io/'>Aharoni Lab</a>, UCLA <br/> " +
                       "Overview of the UCLA Miniscope project: <a href='http://www.miniscope.org'>click here</a> <br/>" +
                       "Miniscope Wiki for newest projects: <a href='https://github.com/Aharoni-Lab/Miniscope-v4/wiki'>click here</a> <br/>" +
@@ -165,7 +166,7 @@ Window {
                     border.width: 1
                     color: "#a8a7fd"
                 }
-                onClicked: fileDialog.setVisible(1)
+                onClicked: fileDialog.setVisible//(true) //1->true
                 onHoveredChanged: hovered ? configRect.color = "#f8a7fd" : configRect.color = "#a8a7fd"
 
             }
@@ -259,11 +260,12 @@ Window {
 
         ScrollView {
             id: view
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
             Layout.minimumHeight: 80
             Layout.preferredHeight: 80
             Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.rowSpan: 4
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
@@ -276,8 +278,14 @@ Window {
                                 //                anchors.fill: parent
                 font.pointSize: 12
                 readOnly: true
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                implicitWidth: 400
                 background: Rectangle {
                     radius: rbSelectUserConfig.radius
+                    //width: taConfigDesc.width
+                    //height: taConfigDesc.height
                     anchors.fill: parent
                     border.width: 1
                     color: "#ebebeb"
@@ -389,11 +397,17 @@ Window {
 
     Connections{
         target: backend
-        onShowErrorMessage: errorMessageDialog.visible = true
+        //onShowErrorMessage: errorMessageDialog.visible = true
+        function  onShowErrorMessage(){
+            errorMessageDialog.visible = true;
+        }
     }
     Connections{
         target: backend
-        onShowErrorMessageCompression: errorMessageDialogCompression.visible = true
+        //onShowErrorMessageCompression: errorMessageDialogCompression.visible = true
+        function onShowErrorMessageCompression() {
+            errorMessageDialogCompression.visible = true;
+        }
     }
     Component.onCompleted: {
         setX(Screen.width / 2 - width / 2);

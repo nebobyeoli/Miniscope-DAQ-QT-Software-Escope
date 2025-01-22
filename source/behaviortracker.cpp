@@ -1,6 +1,6 @@
 #include "behaviortracker.h"
 #include "newquickview.h"
-#include "videodisplay.h"
+//#include "videodisplay.h"
 #include "behaviortrackerworker.h"
 
 #include <opencv2/opencv.hpp>
@@ -26,19 +26,19 @@
 #ifdef USE_PYTHON
  #undef slots
  #include <Python.h>
- #include <numpy/arrayobject.h>
+ #include <numpy/arrayobject.h>  // /arrayobject.h
  #define slots
 #endif
 
 BehaviorTracker::BehaviorTracker(QObject *parent, QJsonObject userConfig, qint64 softwareStartTime) :
     QObject(parent),
     numberOfCameras(0),
-    m_trackingRunning(false),
     m_camResolution(640,480),
+    freePoses(new QSemaphore()),
+    usedPoses(new QSemaphore()),
     m_btPoseCount(new QAtomicInt(0)),
     m_previousBtPoseFrameNum(0),
-    usedPoses(new QSemaphore()),
-    freePoses(new QSemaphore()),
+    m_trackingRunning(false),
     m_pCutoffDisplay(0),
     m_softwareStartTime(softwareStartTime)
 {
@@ -65,6 +65,7 @@ BehaviorTracker::BehaviorTracker(QObject *parent, QJsonObject userConfig, qint64
 int BehaviorTracker::initNumpy()
 {
     import_array1(-1);
+    return 0;
 }
 
 void BehaviorTracker::parseUserConfigTracker()
@@ -97,7 +98,7 @@ void BehaviorTracker::parseUserConfigTracker()
         m_overlayType = m_btConfig["poseOverlay"].toObject()["type"].toString("point");
         m_overlayNumPoses = m_btConfig["poseOverlay"].toObject()["numOfPastPoses"].toInt(0) + 1;
         m_poseMarkerSize = m_btConfig["poseOverlay"].toObject()["markerSize"].toDouble(10);
-        if (m_poseOverlayEnabled = m_btConfig["poseOverlay"].toObject().contains("skeleton")) {
+        if (m_poseOverlayEnabled == m_btConfig["poseOverlay"].toObject().contains("skeleton")) {
             QJsonObject tempSk = m_btConfig["poseOverlay"].toObject()["skeleton"].toObject();
             m_poseOverlaySkeletonEnabled = tempSk["enabled"].toBool(true);
             QJsonArray tempArray = tempSk["connectedIndices"].toArray();
@@ -264,7 +265,7 @@ void BehaviorTracker::startThread()
     }
     else
         // Py environment path missing
-        sendMessage("Error: Path to Python Environment (\"pyEnvPath:\") missing from user config file!");
+        emit sendMessage("Error: Path to Python Environment (\"pyEnvPath:\") missing from user config file!");
 
 
 }
@@ -562,9 +563,9 @@ void BehaviorTracker::handleAddNewTracePose(int poseIdx, QString type, bool same
 
 TrackerDisplayRenderer::TrackerDisplayRenderer(QObject *parent, QSize displayWindowSize):
     QObject(parent),
-    m_t(0),
     m_newImage(false),
     m_newOccupancy(false),
+    m_t(0),
     m_textureImage(nullptr),
     m_texture2DHist(nullptr),
     m_programImage(nullptr),

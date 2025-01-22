@@ -148,11 +148,11 @@ void VideoDevice::createView()
 {
     if (m_camConnected != 0) {
         if (m_camConnected == 1)
-             sendMessage(m_deviceName + " connected using Direct Show.");
+             emit sendMessage(m_deviceName + " connected using Direct Show.");
         else if (m_camConnected == 2)
-            sendMessage(m_deviceName + " couldn't connect using Direct Show. Using computer's default backend.");
+            emit sendMessage(m_deviceName + " couldn't connect using Direct Show. Using computer's default backend.");
         else if (m_camConnected == 3)
-            sendMessage("Video file loaded.");
+            emit sendMessage("Video file loaded.");
 
         qmlRegisterType<VideoDisplay>("VideoDisplay", 1, 0, "VideoDisplay");
 
@@ -218,7 +218,7 @@ void VideoDevice::createView()
         QObject::connect(view, &NewQuickView::closing, deviceStream, &VideoStreamOCV::stopSteam);
         QObject::connect(vidDisplay->window(), &QQuickWindow::beforeRendering, this, &VideoDevice::sendNewFrame);
 
-        sendMessage(m_deviceName + " is connected.");
+        emit sendMessage(m_deviceName + " is connected.");
 
         if (m_ucDevice.contains("ROI")) {
             vidDisplay->setROI({(int)round(m_roiBoundingBox[0] * m_ucDevice["windowScale"].toDouble(1)),
@@ -232,7 +232,7 @@ void VideoDevice::createView()
         emit displayCreated(); // signal to classes inherating this class
     }
     else {
-        sendMessage("Error: " + m_deviceName + " cannot connect to camera. Check deviceID.");
+        emit sendMessage("Error: " + m_deviceName + " cannot connect to camera. Check deviceID.");
     }
 
 }
@@ -537,6 +537,8 @@ void VideoDevice::sendNewFrame(){
 void VideoDevice::handleNewDisplayFrame(qint64 timeStamp, cv::Mat frame, int bufIdx, VideoDisplay* vidDisp)
 {
 //    cv::Mat tempMat1, tempMat2;
+    Q_UNUSED(timeStamp);
+    Q_UNUSED(bufIdx);
     QImage tempFrame2;
     cv::Mat tempFrame;
     // TODO: Think about where color to gray and vise versa should take place.
@@ -721,16 +723,16 @@ void VideoDevice::handleNewROI(int leftEdge, int topEdge, int width, int height)
     if ((m_roiBoundingBox[0] + m_roiBoundingBox[2]) > m_cDevice["width"].toInt(-1)) {
         // Edge is off screen
         m_roiBoundingBox[2] = m_cDevice["width"].toInt(-1) - m_roiBoundingBox[0];
-        sendMessage("Warning: Right edge of ROI drawn beyond right edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
+        emit sendMessage("Warning: Right edge of ROI drawn beyond right edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
     }
     if ((m_roiBoundingBox[1] + m_roiBoundingBox[3]) > m_cDevice["height"].toInt(-1)) {
         // Edge is off screen
         m_roiBoundingBox[3] = m_cDevice["height"].toInt(-1) - m_roiBoundingBox[1];
-        sendMessage("Warning: Bottm edge of ROI drawn beyond bottom edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
+        emit sendMessage("Warning: Bottm edge of ROI drawn beyond bottom edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
 
     }
 
-    sendMessage("ROI Set to [" + QString::number(m_roiBoundingBox[0]) + ", " +
+    emit sendMessage("ROI Set to [" + QString::number(m_roiBoundingBox[0]) + ", " +
             QString::number(m_roiBoundingBox[1]) + ", " +
             QString::number(m_roiBoundingBox[2]) + ", " +
             QString::number(m_roiBoundingBox[3]) + "]");
@@ -741,7 +743,10 @@ void VideoDevice::handleNewROI(int leftEdge, int topEdge, int width, int height)
 
 void VideoDevice::handleAddNewTraceROI(int leftEdge, int topEdge, int width, int height)
 {
-
+    Q_UNUSED(leftEdge);
+    Q_UNUSED(topEdge);
+    Q_UNUSED(width);
+    Q_UNUSED(height);
 }
 
 void VideoDevice::close()

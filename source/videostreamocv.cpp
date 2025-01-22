@@ -184,7 +184,7 @@ void VideoStreamOCV::startStream()
                 if (!cam->grab()) {
                     // Grab failed
                     status = false;
-                    sendMessage("Warning: " + m_deviceName + " grab frame failed. Attempting to reconnect.");
+                    emit sendMessage("Warning: " + m_deviceName + " grab frame failed. Attempting to reconnect.");
                     if (cam->isOpened()) {
                         qDebug() << "Grab failed: Releasing cam" << m_cameraID;
                         cam->release();
@@ -194,7 +194,7 @@ void VideoStreamOCV::startStream()
 
                     if (attemptReconnect()) {
                         // TODO: add some timeout here
-                        sendMessage("Warning: " + m_deviceName + " reconnected.");
+                        emit sendMessage("Warning: " + m_deviceName + " reconnected.");
                         qDebug() << "Reconnect to camera" << m_cameraID;
                     }
                 }
@@ -204,7 +204,7 @@ void VideoStreamOCV::startStream()
                     if (!cam->retrieve(frame)) {
                         // Retrieve failed
                         status = false;
-                        sendMessage("Warning: " + m_deviceName + " retrieve frame failed. Attempting to reconnect.");
+                        emit sendMessage("Warning: " + m_deviceName + " retrieve frame failed. Attempting to reconnect.");
                         if (cam->isOpened()) {
                             qDebug() << "Retieve failed: Releasing cam" << m_cameraID;
                             cam->release();
@@ -214,7 +214,7 @@ void VideoStreamOCV::startStream()
 
                         if (attemptReconnect()) {
                             // TODO: add some timeout here
-                            sendMessage("Warning: " + m_deviceName + " reconnected.");
+                            emit sendMessage("Warning: " + m_deviceName + " reconnected.");
                             qDebug() << "Reconnect to camera" << m_cameraID;
                         }
                     }
@@ -234,7 +234,7 @@ void VideoStreamOCV::startStream()
                     if (cam->open(fileName.toStdString())) {
                         if (!cam->read(frame)) {
                             status = false;
-                            return;
+                            //return;
                         }
                     }
                     else
@@ -251,8 +251,8 @@ void VideoStreamOCV::startStream()
                 }
                 else {
                     //                            frame = cv::repeat(frame,4,4);
-                    sendMessage("Warning: " + m_deviceName + " status frame grabbed, m_isColor=false. (startStream)");
-                    cv::cvtColor(frame, frameBuffer[idx%frameBufferSize], cv::COLOR_BGR2GRAY);
+                    emit sendMessage("Warning: " + m_deviceName + " status frame grabbed, m_isColor=truenotfalse. (startStream)");
+                    cv::cvtColor(frame, frameBuffer[idx%frameBufferSize], cv::COLOR_BayerGB2BGR);
                 }
                 // qDebug() << "Frame Number:" << *m_acqFrameNum - cam->get(cv::CAP_PROP_CONTRAST);
 
@@ -311,7 +311,7 @@ void VideoStreamOCV::startStream()
                     // Will throw away this acquired frame
                     if (freeFrames->available() == 0) {
                         // Buffers are full!
-                        sendMessage("Error: " + m_deviceName + " frame buffer is full. Frames will be lost!");
+                        emit sendMessage("Error: " + m_deviceName + " frame buffer is full. Frames will be lost!");
                         QThread::msleep(100);
                     }
                 }
@@ -324,6 +324,9 @@ void VideoStreamOCV::startStream()
                 }
 
             }
+            else {
+                return;
+            }
             // Get any new events
             QCoreApplication::processEvents(); // Is there a better way to do this. This is against best practices
             if (!sendCommandQueue.isEmpty())
@@ -332,7 +335,7 @@ void VideoStreamOCV::startStream()
         cam->release();
     }
     else {
-        sendMessage("Error: Could not connect to video stream " + QString::number(m_cameraID));
+        emit sendMessage("Error: Could not connect to video stream " + QString::number(m_cameraID));
         qDebug() << "Camera " << m_cameraID << " failed to open.";
     }
 }
@@ -496,7 +499,7 @@ bool VideoStreamOCV::attemptReconnect()
             cam->set(cv::CAP_PROP_FRAME_WIDTH, m_expectedWidth);
             cam->set(cv::CAP_PROP_FRAME_HEIGHT, m_expectedHeight);
             QThread::msleep(500);
-            requestInitCommands();
+            emit requestInitCommands();
             return true;
         }
     }
@@ -541,7 +544,7 @@ bool VideoStreamOCV::attemptReconnect()
             cam->set(cv::CAP_PROP_FRAME_WIDTH, m_expectedWidth);
             cam->set(cv::CAP_PROP_FRAME_HEIGHT, m_expectedHeight);
             QThread::msleep(500);
-            requestInitCommands();
+            emit requestInitCommands();
             return true;
         }
     }

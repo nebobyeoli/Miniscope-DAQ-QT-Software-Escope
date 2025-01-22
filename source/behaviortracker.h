@@ -2,7 +2,7 @@
 #define BEHAVIORTRACKER_H
 
 #include "newquickview.h"
-#include "videodisplay.h"
+//#include "videodisplay.h"
 #include "behaviortrackerworker.h"
 
 #include <opencv2/opencv.hpp>

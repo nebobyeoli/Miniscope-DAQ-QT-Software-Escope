@@ -43,7 +43,7 @@
         "height": 768,
         "pixelClock": 96,
         "headOrientation": false,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["1X", "8X", "16X", "32X"],

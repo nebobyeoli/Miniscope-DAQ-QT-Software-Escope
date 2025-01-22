@@ -8,6 +8,7 @@
 #include <QString>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QStandardPaths>
 
 #include "miniscope.h"
 #include "behaviorcam.h"
@@ -47,7 +48,7 @@ public:
     QString versionNumber() { return m_versionNumber; }
     void setVersionNumber(const QString &input) { m_versionNumber = input; }
 
-    QStandardItemModel* jsonTreeModel() { return m_jsonTreeModel; }
+    QStandardItemModel* jsonTreeModel() { return m_jsonTreeModel; } //읽기: jsonTreeModel을 반환하는 함수
     void setJsonTreeModel(QStandardItemModel* model) { m_jsonTreeModel = model; }
 
     void constructJsonTreeModel();
@@ -55,6 +56,9 @@ public:
     QStandardItem *handleJsonObject(QStandardItem* parent, QJsonObject obj, QJsonObject objProps);
     QStandardItem *handleJsonArray(QStandardItem* parent, QJsonArray arry, QString type);
     void generateUserConfigFromModel();
+    void updateTreeViewModel(const QJsonObject &jConfig);
+    void addJsonObjectToTree(QStandardItem *parent, const QJsonObject &jsonObject);
+    void updateJsonModel(int row, int column, const QString &newValue);
     QJsonObject getObjectFromModel(QModelIndex index);
     QJsonArray getArrayFromModel(QModelIndex index);
     Q_INVOKABLE void saveConfigObject();

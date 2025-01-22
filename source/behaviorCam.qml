@@ -26,7 +26,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_H) {
-            if (root.state == "controlsShown")
+            if (root.state === "controlsShown")
                 root.state = "controlsHidden";
             else
                 root.state = "controlsShown";

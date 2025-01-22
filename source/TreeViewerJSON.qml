@@ -1,21 +1,38 @@
-import QtQuick // import QtQuick 2.0
-import QtQuick.Controls // import QtQuick.Controls 1.4
-    import QtQuick.Controls 2.12 as QTQC2
+import QtQuick 2.0
+import QtQuick.Controls 2.15
+import QtQuick.Controls 2.12 as QTQC2
 import QtQuick.Layouts 1.3
-// import QtQuick.Controls.Styles 1.4
+//import QtQuick.Controls.Styles
+
+/*Column {
+    spacing: 10
+    Text {
+        text: "Config Path: " + backend.configPath
+        font.pointSize: 12
+        color: "gray"
+    }
+}*/
 
 TreeView {
+
+
     property string toolTipText
+    property double implicitHeight: 100
     id:root
     delegate: Rectangle {    // rowDelegate: Rectangle {
             width: parent.width
             height: 25
+            implicitHeight: 25
+            implicitWidth: 100
+
 
         }
 
-    TableView { // TableViewColumn {
-        //title: "Key"
-        //role: "key"
+    model: backend.getTreeModel()
+
+    TableViewColumn{
+        title: "Key"
+        role: "key"
         width: 200
 
         delegate: Loader {
@@ -58,9 +75,9 @@ TreeView {
         }
     }
 
-    TableView { // TableViewColumn {
-        //title: "Value"
-        //role: "value"
+    TableViewColumn { // TableViewColumn {
+        title: "Value"
+        role: "value"
         width: 400
         delegate: Loader {
             property string modelValue: model.value
@@ -72,18 +89,13 @@ TreeView {
                 else {textFieldDelegate}
             }
 
-//        delegate: Loader {
-//            property var modelTwo: model.value
-//            sourceComponent: stringDelegate
-//            function updateValue(value) {
-//                model.value = value;
-//            }
+
         }
     }
 
-    TableView { // TableViewColumn {
-        //title: "Type"
-        //role: "type"
+    TableViewColumn { // TableViewColumn {
+        title: "Type"
+        role: "type"
         width: 90
         delegate: Loader {
             property string modelType: model.type
@@ -103,6 +115,7 @@ TreeView {
                 border.color: "black"
                 border.width: 1
 //                anchors.fill: parent
+
                 Text {
                     text: model.type
                     anchors.left: parent.left
@@ -177,8 +190,8 @@ TreeView {
                 }
             property var validInt : IntValidator { bottom:0;}
             property var validDouble : DoubleValidator { bottom:0;}
-            property var validPath : RegularExpressionValidator{regularExpression: /^[^\\]+$/} //RegExpValidator{regExp: /^[^\\]+$/}
-            property var validAll : RegularExpressionValidator{} // RegExpValidator{}
+            property var validPath : RegExpValidator{regExp: /^[^\\]+$/}//RegularExpressionValidator{regularExpression: /^[^\\]+$/}
+            property var validAll : RegExpValidator{} //RegularExpressionValidator{}
 
             validator: {
 
@@ -223,11 +236,14 @@ TreeView {
     DropArea {
         id: drop
         anchors.fill: parent
-        onDropped: {
-            // Send file name to c++ backend
-            if (drop.hasUrls) {
-                backend.userConfigFileName = drop.urls[0];
 
+        onDropped: {
+            if (drop.hasUrls) {
+                let url = drop.urls[0].toString(); // URL을 문자열로 변환
+                if (url.startsWith("file:///")) {
+                    url = url.substring(8); // "file:///" 제거
+                }
+                backend.userConfigFileName = url; // 파일 경로 전달
             }
         }
     }

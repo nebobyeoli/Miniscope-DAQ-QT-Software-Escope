@@ -1,12 +1,6 @@
-# DEPRECATION NOTICE
+# TestingEscope
 
-This software is reaching its end of life, and we are in the process of consolidating and rearchitecting miniscope IO software as an SDK with minimal I/O functionality for all miniscopes - [`miniscope-io`](https://github.com/Aharoni-Lab/miniscope-io) and a yet-to-be-started GUI built on top of that. 
-
-This software will receive one final major update to bring it to Qt6 and allow it to be reproducibly built so that current users can maintain it and we can handle minimal patches in the short term. We do not have a firm deprecation timeline yet, but will update this notice with at least 6 months notice before formally dropping support. 
-
-These issues are tracking the update:
-- [ ] [Reproducible Builds](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/issues/61)
-- [ ] [Update to Qt6](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/issues/62)
+<br>
 
 # Miniscope-DAQ-QT-Software
 

@@ -47,7 +47,7 @@
         "height": 768,
         "pixelClock": 96,
         "headOrientation": false,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["1X", "8X", "16X", "32X"],
@@ -266,7 +266,7 @@
         "height": 608,
         "pixelClock": 16.6,
         "headOrientation": true,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["Low", "Medium", "High"],
@@ -479,7 +479,7 @@
         "height": 608,
         "pixelClock": 16.6,
         "headOrientation": false,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["Low", "Medium", "High"],
@@ -661,7 +661,7 @@
         "height": 480,
         "pixelClock": 26,
         "headOrientation": false,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["Low", "Medium", "High"],
@@ -830,7 +830,7 @@
         "height": 768,
         "pixelClock": 96,
         "headOrientation": false,
-        "isColor": false,
+        "isColor": true,
         "controlSettings": {
             "gain": {
                 "displaySpinBoxValues":["1X", "8X", "16X", "32X"],

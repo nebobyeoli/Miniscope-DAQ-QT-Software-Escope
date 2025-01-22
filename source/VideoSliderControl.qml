@@ -10,7 +10,7 @@ Item {
     width: slider.width + icon.width + textValue.width + 20
     state: "nothovered"
     property color textColor: "black"
-    property var iconPath: "img/icon/ewl.ico"
+    property string iconPath: "img/icon/ewl.ico"
     property double min: 0.0
     property double max: 100.0
     property double stepSize: 1.0

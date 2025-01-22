@@ -17,6 +17,7 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QModelIndex>
+#include <QStandardPaths>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core.hpp>
@@ -48,20 +49,23 @@ backEnd::backEnd(QObject *parent) :
 {
 #ifdef DEBUG
 //    QString homePath = QDir::homePath();
-    m_userConfigFileName = "./userConfigs/UserConfigExample.json";
-//    loadUserConfigFile();
+    QDir dir;
+    qDebug()<< "current path : "<<dir.currentPath();
+    QDir::setCurrent("C:/Escope/QT_Software_V5/source");
+    qDebug() <<"set current path to: " <<dir.currentPath();
+    m_userConfigFileName = "C:/Escope/QT_Software_V5/build/release/colortest2/deviceConfigs/userConfigEscope1.json"; //"./userConfigs/UserConfigEscope1.json";
+    loadUserConfigFile();
     handleUserConfigFileNameChanged();
-    //setUserConfigOK(true);
+    setUserConfigOK(true);
 #endif
-    m_softwareStartTime = QDateTime().currentMSecsSinceEpoch();
 
+    m_softwareStartTime = QDateTime().currentMSecsSinceEpoch();
     // User Config default values
     researcherName = "";
     dataDirectory = "";
     experimentName = "";
     animalName = "";
     dataStructureOrder = {"researcherName", "experimentName", "animalName", "date"};
-
     ucExperiment["type"] = "None";
 //    ucMiniscopes = {"None"};
 //    ucBehaviorCams = {"None"};
@@ -88,18 +92,51 @@ backEnd::backEnd(QObject *parent) :
     QString jsonFile;
     QJsonObject jObj;
     QStringList supportedDevices;
-    file.setFileName("deviceConfigs/videoDevices.json");
-    bool status = file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    qDebug() <<"supportedDevices: "<< supportedDevices;
+
+    // 절대 경로로 파일 설정-> 경로 문제 수정
+//    QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/deviceConfigs/videoDevices.json";
+    QString filePath = QCoreApplication::applicationDirPath() + "/deviceConfigs/videoDevices.json";
+    file.setFileName(filePath);
+    //file.setFileName("./deviceConfigs/videoDevices.json");
+    qDebug() << "Selected path:" << filePath;
+    QString configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/AppName";
+    qDebug() << "Config Path:" << configPath;
+
+
+
+    // 파일 열기
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        jsonFile = file.readAll();
+        file.close();
+        qDebug() << "Loaded videoDevices";
+
+        // JSON 파싱
+        QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
+        jObj = d.object();
+        supportedDevices = jObj.keys();
+    } else {
+        qWarning() << "Failed to open videoDevice file! Path:" << file.fileName();
+        return;
+    }
+
+
+    /*bool status = file.open(QIODevice::ReadOnly | QIODevice::Text);
     if (status == true) {
         jsonFile = file.readAll();
         file.close();
+        qDebug() << "Loaded videoDevices";
         QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
         jObj = d.object();
         supportedDevices = jObj.keys();
     }
+    else{
+        qWarning() << "Failed to open videoDevice file!";
+    }*/
 
     QString initDisplayMessage;
-    initDisplayMessage = "Select a User Configuration file. You can click the button above or just drag and drop a user config file here.\n\n";
+    initDisplayMessage = "Escope_test\n\nSelect a User Configuration file. You can click the button above or just drag and drop a user config file here.\n\n";
     initDisplayMessage.append("Supported devices are:\n");
     for (int i=0; i < supportedDevices.length(); i++) {
         initDisplayMessage.append("\t" + supportedDevices[i] + "\n");
@@ -108,11 +145,36 @@ backEnd::backEnd(QObject *parent) :
     initDisplayMessage.append("Available compression Codecs on your computer are:\n\t" + m_availableCodecList +
                               "\n\nUnavailable compression Codes on your computer are:\n\t" + tempStr.chopped(2));
 
-            setUserConfigDisplay(initDisplayMessage);
+    setUserConfigDisplay(initDisplayMessage);
 
 //    QObject::connect(this, SIGNAL (userConfigFileNameChanged()), this, SLOT( handleUserConfigFileNameChanged() ));
 
+            file.setFileName(QCoreApplication::applicationDirPath() + "/deviceConfigs/userConfigProps.json"); //C:/Escope/QT_Software_V5/build/release/colortest2
+            if (!file.exists()) {
+                qWarning() << "파일이 존재하지 않습니다:" << file.fileName();
+                return;
+            }
 
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                qWarning() << "파일을 열 수 없습니다:" << file.fileName();
+                return;
+            }
+
+            // 파일 내용 읽기
+            jsonFile = file.readAll();
+            file.close();
+
+            // JSON 파싱
+            QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
+            if (d.isNull() || !d.isObject()) {
+                qWarning() << "JSON 형식이 잘못되었습니다:" << file.fileName();
+                return;
+            }
+
+            // JSON 객체로 변환
+            m_configProps = d.object();
+            qDebug() << "설정 프로퍼티 로드 완료:" << m_configProps.keys();
+/*
     file.setFileName("deviceConfigs/userConfigProps.json");
     status = file.open(QIODevice::ReadOnly | QIODevice::Text);
     if (status == true) {
@@ -123,7 +185,8 @@ backEnd::backEnd(QObject *parent) :
     }
     else {
         // Can't find config props file. Possibly throw an error/warning somewhere???
-    }
+    }*/
+
 
 }
 
@@ -134,7 +197,7 @@ void backEnd::setUserConfigFileName(const QString &input)
     if (furl.contains(".json")) {
         if (furl != m_userConfigFileName) {
             m_userConfigFileName = furl;
-            //emit userConfigFileNameChanged();
+            emit userConfigFileNameChanged();
         }
 
         handleUserConfigFileNameChanged();
@@ -159,6 +222,10 @@ void backEnd::setAvailableCodecList(const QString &input)
 
 void backEnd::constructJsonTreeModel()
 {
+    //QFile file;
+    //QByteArray jsonFile; //QString에서 변경
+    QJsonObject jObj;
+
     m_jsonTreeModel->clear();
     m_jsonTreeModel->setColumnCount(3);
     m_standardItem.clear();
@@ -231,7 +298,48 @@ void backEnd::constructJsonTreeModel()
                 m_jsonTreeModel->appendRow(m_standardItem.last());
             }
         }
+        qDebug() << "Key:" << keys[i] << ", Value:" << m_userConfig[keys[i]].toString() << ", Type:" << tempType;
+
+
     }
+
+    qDebug() << "Opening userConfigProps.json file...";
+    QFile file("C:/Escope/QT_Software_V5/build/release/colortest2/deviceConfigs/userConfigEscope1.json");
+    if (!file.exists()) {
+        qWarning() << "File does not exist!";
+        return;
+    }
+    QString jsonString = file.readAll();
+    if (jsonString.isEmpty()) {
+        qWarning() << "File is empty!";
+        return;
+    }
+
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "File status:" << file.isOpen();
+        QString jsonFile = file.readAll();//QByteArray
+        file.close();
+
+        QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
+        m_configProps = d.object();
+
+    //  "m_configProps 내용 확인    qDebug() << "Loaded userConfigProps:" << m_configProps;
+    } else {
+        qDebug() << "Failed to open userConfigProps.json file!";
+    }
+
+    //qDebug() << "JSON data:" << m_userConfig;
+
+    if (m_userConfig.isEmpty()) {
+        qDebug() << "Error: m_userConfig is empty. Please check the JSON file.";
+        return;
+    }
+    if (m_configProps.isEmpty()) {
+        qDebug() << "Error: m_configProps is empty. Ensure the 'userConfigProps.json' file is properly loaded.";
+        return;
+    }
+
 }
 
 void backEnd::treeViewTextChanged(const QModelIndex &index, QString text)
@@ -270,6 +378,7 @@ QStandardItem *backEnd::handleJsonObject(QStandardItem *parent, QJsonObject obj,
                 m_standardItem.last()->setData(keys[i], Qt::UserRole + 1);
                 m_standardItem.last()->setData("", Qt::UserRole + 2);
                 m_standardItem.last()->setData("Object", Qt::UserRole + 3);
+                m_standardItem.last()->setData(m_configProps[keys[i]].toObject()["tips"].toString("No tips available"), Qt::UserRole + 4);
 
                 if (parent->data(Qt::UserRole + 1).toString() == "cameras")
                     parent->appendRow(handleJsonObject(m_standardItem.last(), obj[keys[i]].toObject(), objProps["cameraDeviceName"].toObject()));
@@ -292,8 +401,10 @@ QStandardItem *backEnd::handleJsonObject(QStandardItem *parent, QJsonObject obj,
                 m_standardItem.append(new QStandardItem());
     //            m_standardItem.last()->setColumnCount(3);
                 m_standardItem.last()->setData(keys[i], Qt::UserRole + 1);
-                m_standardItem.last()->setData(tempS, Qt::UserRole + 2);
-                m_standardItem.last()->setData(objProps[keys[i]].toObject()["type"].toString("String"), Qt::UserRole + 3);
+                m_standardItem.last()->setData(tempS.isEmpty() ? "N/A" : tempS, Qt::UserRole + 2);
+                m_standardItem.last()->setData(tempType.isEmpty() ? "Unknown" : tempType, Qt::UserRole + 3);
+                //m_standardItem.last()->setData(tempS, Qt::UserRole + 2);
+                //m_standardItem.last()->setData(objProps[keys[i]].toObject()["type"].toString("String"), Qt::UserRole + 3);
                 m_standardItem.last()->setData(objProps[keys[i]].toObject()["tips"].toString(), Qt::UserRole + 4);
                 parent->appendRow(m_standardItem.last());
             }
@@ -376,20 +487,22 @@ QStandardItem *backEnd::handleJsonArray(QStandardItem *parent, QJsonArray arry, 
     return parent;
 }
 
+
+
 void backEnd::generateUserConfigFromModel()
 {
 
-//    void forEach(QAbstractItemModel* model, QModelIndex parent = QModelIndex()) {
-//        for(int r = 0; r < model->rowCount(parent); ++r) {
-//            QModelIndex index = model->index(r, 0, parent);
-//            QVariant name = model->data(index);
-//            qDebug() << name;
-//            // here is your applicable code
-//            if( model->hasChildren(index) ) {
-//                forEach(model, index);
-//            }
-//        }
-//    }
+    /* void forEach(QAbstractItemModel* model, QModelIndex parent = QModelIndex()) {
+        for(int r = 0; r < model->rowCount(parent); ++r) {
+            QModelIndex index = model->index(r, 0, parent);
+            QVariant name = model->data(index);
+            qDebug() << name;
+            // here is your applicable code
+            if( model->hasChildren(index) ) {
+                forEach(model, index);
+            }
+        }
+    }*/
 
     QJsonObject jConfig;
     QString key, value, type;
@@ -427,6 +540,44 @@ void backEnd::generateUserConfigFromModel()
 //    file.write(d.toJson());
 //    file.close();
 }
+
+
+
+void backEnd::updateTreeViewModel(const QJsonObject &jConfig)
+{
+    m_jsonTreeModel->clear();  // Clear the current model
+    m_jsonTreeModel->setColumnCount(3);
+    m_jsonTreeModel->setHorizontalHeaderLabels({"Key", "Value", "Type"});
+
+    for (auto it = jConfig.begin(); it != jConfig.end(); ++it) {
+        QList<QStandardItem *> row;
+        row << new QStandardItem(it.key())                          // Key
+            << new QStandardItem(it.value().toString())             // Value
+            << new QStandardItem(it.value().type() == QJsonValue::Object ? "Object" : "String"); // Type
+        m_jsonTreeModel->appendRow(row);
+    }
+}
+
+void backEnd::addJsonObjectToTree(QStandardItem *parent, const QJsonObject &jsonObject) {
+    for (auto it = jsonObject.begin(); it != jsonObject.end(); ++it) {
+        QStandardItem *item = new QStandardItem(it.key());
+        parent->appendRow(item);
+        if (it->isObject()) {
+            addJsonObjectToTree(item, it->toObject());
+        } else {
+            item->appendRow(new QStandardItem(it->toString()));
+        }
+    }
+}
+
+void backEnd::updateJsonModel(int row, int column, const QString &newValue) {
+    if (!m_jsonTreeModel) return;
+
+    QModelIndex index = m_jsonTreeModel->index(row, column);
+    m_jsonTreeModel->setData(index, newValue, Qt::EditRole);
+    emit jsonTreeModelChanged(); // UI 업데이트를 위해 신호 발생
+}
+
 
 QJsonObject backEnd::getObjectFromModel(QModelIndex idx)
 {
@@ -472,6 +623,7 @@ QJsonArray backEnd::getArrayFromModel(QModelIndex idx)
 
     for (int i=0; i < m_jsonTreeModel->rowCount(idx); i++) {
         QModelIndex index = m_jsonTreeModel->index(i, 0, idx);
+        qDebug() << m_jsonTreeModel->data(index, Qt::DisplayRole).toString();
         key = m_jsonTreeModel->data(index, Qt::UserRole + 1).toString();
         value = m_jsonTreeModel->data(index, Qt::UserRole + 2).toString();
         type = m_jsonTreeModel->data(index, Qt::UserRole + 3).toString();
@@ -524,12 +676,14 @@ void backEnd::loadUserConfigFile()
     QString jsonFile;
     QFile file;
     file.setFileName(m_userConfigFileName);
+
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     jsonFile = file.readAll();
     setUserConfigDisplay("User Config File Selected: " + m_userConfigFileName + "\n" + jsonFile);
     file.close();
     QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
     m_userConfig = d.object();
+
 
     // Correct for old device structure in user config files
     QJsonObject tempObj;
@@ -579,6 +733,8 @@ void backEnd::loadUserConfigFile()
         deviceObj["cameras"] = camObj;
     }
     m_userConfig["devices"] = deviceObj;
+    //qDebug() << "Loaded JSON Data:\n" << QJsonDocument(m_userConfig).toJson(QJsonDocument::Indented);
+
 }
 
 void backEnd::onRunClicked()
@@ -619,6 +775,8 @@ void backEnd::handleUserConfigFileNameChanged()
     constructJsonTreeModel();
     parseUserConfig();
     checkUserConfigForIssues();
+
+
 }
 
 void backEnd::connectSnS()
@@ -715,11 +873,19 @@ void backEnd::setupDataSaver()
 
 void backEnd::testCodecSupport()
 {
+    // 비디오 기능 비활성화 플래그 추가
+    bool videoFeatureEnabled = false; // 나중에 필요할 때 true로 변경
+
+    if (!videoFeatureEnabled) {
+        qWarning() << "Video features are disabled. Skipping codec support test.";
+        return;
+    }
+
     // This function will test which codecs are supported on host's machine
     cv::VideoWriter testVid;
     //testVid.open("test.avi", -1,20, cv::Size(640, 480), true); //2024.08.29 deactivate as normal
     QVector<QString> possibleCodec({"DIB ", "MJPG", "MJ2C", "XVID", "FFV1", "DX50", "FLV1", "H264", "I420","MPEG","mp4v", "0000", "LAGS", "ASV1", "GREY"});
-    //QVector<QString> possibleCodec({"MJPG", "MJ2C", "XVID", "FFV1", "DX50", "FLV1", "I420","MPEG","mp4v", "ASV1", "GREY"});
+
     for (int i = 0; i < possibleCodec.length(); i++) {
         testVid.open("test.avi", cv::VideoWriter::fourcc(possibleCodec[i].toStdString()[0],possibleCodec[i].toStdString()[1],possibleCodec[i].toStdString()[2],possibleCodec[i].toStdString()[3]),
                 20, cv::Size(640, 480), true);
@@ -739,18 +905,18 @@ bool backEnd::checkUserConfigForIssues()
     if (checkForUniqueDeviceNames() == false) {
         // Need to tell user that user config has error(s)
         setUserConfigOK(false);
-        userConfigOKChanged();
-        showErrorMessage();
+        emit userConfigOKChanged();
+        emit showErrorMessage();
     }
     else if (checkForCompression() == false) {
         // Need to tell user that user config has error(s)
         setUserConfigOK(false);
-        userConfigOKChanged();
-        showErrorMessageCompression();
+        emit userConfigOKChanged();
+        emit showErrorMessageCompression();
     }
     else {
         setUserConfigOK(true);
-        userConfigOKChanged();
+        emit userConfigOKChanged();
     }
     // TODO: make return do something or remove
     return true;
@@ -826,7 +992,7 @@ void backEnd::parseUserConfig()
         for (int i=0; i < s.length(); i++) {
             tempObj = devices["cameras"].toObject()[s[i]].toObject();
             tempObj["deviceName"] = s[i];
-            qDebug() << "DNSOSNDAIOASDNO" << tempObj;
+        // tempObj 확인    qDebug() << "DNSOSNDAIOASDNO" << tempObj;
             ucBehaviorCams[s[i]] = tempObj;
         }
 
@@ -933,16 +1099,16 @@ void backEnd::constructUserConfigGUI()
     for (idx = 0; idx < keys.length(); idx++) {
         miniscope.append(new Miniscope(this, ucMiniscopes[keys[idx]].toObject(), m_softwareStartTime));
         QObject::connect(miniscope.last(),
-                         SIGNAL (onPropertyChanged(QString, QString, QVariant)),
+                         SIGNAL (onPropertyChanged(QString,QString,QVariant)),
                          dataSaver,
-                         SLOT (devicePropertyChanged(QString, QString, QVariant)));
+                         SLOT (devicePropertyChanged(QString,QString,QVariant)));
 
         // Connect send and receive message to textbox in controlPanel
         QObject::connect(miniscope.last(), SIGNAL(sendMessage(QString)), controlPanel, SLOT( receiveMessage(QString)));
         QObject::connect(miniscope.last(), &Miniscope::addTraceDisplay, traceDisplay, &TraceDisplayBackend::addNewTrace);
         if (miniscope.last()->getErrors() != 0) {
             // Errors have occured in creating this object
-            sendMessage("ERROR: " + miniscope.last()->getDeviceName() + " has error: " + QString::number(miniscope.last()->getErrors()));
+            emit sendMessage("ERROR: " + miniscope.last()->getDeviceName() + " has error: " + QString::number(miniscope.last()->getErrors()));
         }
         else {
             miniscope.last()->setTraceDisplayStatus(traceDisplay != nullptr);
@@ -956,16 +1122,16 @@ void backEnd::constructUserConfigGUI()
     for (idx = 0; idx < keys.length(); idx++) {
         behavCam.append(new BehaviorCam(this, ucBehaviorCams[keys[idx]].toObject(), m_softwareStartTime));
         QObject::connect(behavCam.last(),
-                         SIGNAL (onPropertyChanged(QString, QString, QVariant)),
+                         SIGNAL (onPropertyChanged(QString,QString,QVariant)),
                          dataSaver,
-                         SLOT (devicePropertyChanged(QString, QString, QVariant)));
+                         SLOT (devicePropertyChanged(QString,QString,QVariant)));
 
         // Connect send and receive message to textbox in controlPanel
         QObject::connect(behavCam.last(), SIGNAL(sendMessage(QString)), controlPanel, SLOT( receiveMessage(QString)));
 
         if (behavCam.last()->getErrors() != 0) {
             // Errors have occured in creating this object
-            sendMessage("ERROR: " + behavCam.last()->getDeviceName() + " has error: " + QString::number(behavCam.last()->getErrors()));
+            emit sendMessage("ERROR: " + behavCam.last()->getDeviceName() + " has error: " + QString::number(behavCam.last()->getErrors()));
         }
         else
             behavCam.last()->createView();

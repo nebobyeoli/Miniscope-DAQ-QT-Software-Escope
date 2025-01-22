@@ -175,14 +175,14 @@ void VideoDisplay::setROI(QList<int> roi)
 {
     m_ROI = roi;
 
-    roiChanged();
+    emit roiChanged();
 }
 
 void VideoDisplay::setAddTraceROI(QList<int> roi)
 {
     m_addTraceROI = roi;
 
-    addTraceROIChanged();
+    emit addTraceROIChanged();
 }
 
 void VideoDisplayRenderer::paint()

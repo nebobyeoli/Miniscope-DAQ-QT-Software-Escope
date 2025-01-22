@@ -191,9 +191,9 @@ public:
     QList<QVariant > xLabel() { return m_xLabel; }
     QList<QVariant > ySelectedLabel() { return m_ySelectedLabel; }
     QList<QVariant > traceNames() { return m_traceNames; }
-    void setXLabel(QList<QVariant > label) {m_xLabel = label; xLabelChanged();}
-    void setYSelectedLabel(QList<QVariant > label) {m_ySelectedLabel = label; ySelectedLabelChanged();}
-    void setTraceNames(QList<QVariant > names) {m_traceNames = names; traceNamesChanged();}
+    void setXLabel(QList<QVariant > label) {m_xLabel = label; emit xLabelChanged();}
+    void setYSelectedLabel(QList<QVariant > label) {m_ySelectedLabel = label; emit ySelectedLabelChanged();}
+    void setTraceNames(QList<QVariant > names) {m_traceNames = names; emit traceNamesChanged();}
     qreal t() const { return m_t; }
     void setT(qreal t);
     void addNewTrace(trace_t newTrace);
@@ -234,7 +234,8 @@ private:
     // modifier keys
     QVector<Qt::Key> m_keyMods;
 
-
+    QPointF lastMousePos;
+    QPointF lastMouseClickPos;
 
 };
 

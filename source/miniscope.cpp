@@ -1,5 +1,5 @@
 #include "miniscope.h"
-#include "newquickview.h"
+//#include "newquickview.h"
 #include "videodisplay.h"
 #include "videodevice.h"
 
@@ -140,7 +140,7 @@ void Miniscope::handleNewDisplayFrame(qint64 timeStamp, cv::Mat frame, int bufId
 
     // TODO: Think about where color to gray and vise versa should take place.
     if (frame.channels() == 1) {
-        cv::cvtColor(frame, tempFrame, cv::COLOR_GRAY2BGR);
+        cv::cvtColor(frame, tempFrame, cv::COLOR_BayerGB2BGR); //GRAY2BGR);
         tempFrame2 = QImage(tempFrame.data, tempFrame.cols, tempFrame.rows, tempFrame.step, QImage::Format_RGB888);
     }
     else
@@ -332,7 +332,7 @@ void Miniscope::setupBNOTraceDisplay()
         QString name;
         bool sameOffset;
         int count = 0;
-        int idx;
+        int idx=0;
         for (int i=0; i < tempArray.size(); i++) {
             name = tempArray[i].toString();
             if (name == "roll" || name == "Roll") {

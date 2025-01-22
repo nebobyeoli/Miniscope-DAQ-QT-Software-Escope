@@ -99,24 +99,32 @@ void TraceDisplay::mousePressEvent(QMouseEvent *event)
 
 void TraceDisplay::mouseMoveEvent(QMouseEvent *event)
 {
-    // Drag event:
-//    float deltaX, deltaY;
-//    if (event->buttons() == Qt::LeftButton) {
-//        if (lastMouseMoveEvent) {
-//            deltaX = lastMouseMoveEvent->x() - event->x();
-//            deltaY = lastMouseMoveEvent->y() - event->y();
-//        }
-//        else {
-//            deltaX = lastMouseClickEvent->x() - event->x();
-//            deltaY = lastMouseClickEvent->y() - event->y();
-//        }
-//        lastMouseMoveEvent = new QMouseEvent(*event);
-
-//        m_renderer->updatePan(deltaX, deltaY);
-
-
-//    }
-//    qDebug() << "Mouse Move" << event;
+ //Drag event;
+   float deltaX, deltaY;
+    if (event->buttons() == Qt::LeftButton) {
+       if (!lastMousePos.isNull()) {
+           deltaX = lastMousePos.x() - event->position().x();
+           deltaY = lastMousePos.y() - event->position().y();
+       }
+       else {
+           deltaX = lastMouseClickPos.x() - event->position().x();
+           deltaY = lastMouseClickPos.y() - event->position().y();
+       }
+       lastMousePos = event->position();
+       m_renderer->updatePan(deltaX, deltaY);
+   }
+    /*if (lastMouseMoveEvent) {
+            deltaX = lastMouseMoveEvent-> position().x() - event->position().x();
+            deltaY = lastMouseMoveEvent->position().y() - event->position().y();
+        }
+        else {
+            deltaX = lastMouseClickEvent-> position().x() - event-> position().x();
+            deltaY = lastMouseClickEvent->position().y() - event->position().y();
+        }
+        lastMouseMoveEvent = new QMouseEvent(*event);
+        m_renderer->updatePan(deltaX, deltaY);
+    }
+    qDebug() << "Mouse Move" << event;*/
 }
 
 void TraceDisplay::mouseReleaseEvent(QMouseEvent *event)
@@ -145,19 +153,19 @@ void TraceDisplay::wheelEvent(QWheelEvent *event)
 
 void TraceDisplay::hoverMoveEvent(QHoverEvent *event)
 {
-    //    qDebug() << "Hover" << event->pos();
+    qDebug() << "Hover" << event->position();
 }
 
 void TraceDisplay::mouseDoubleClickEvent(QMouseEvent *event)
 {
 
     if (event->button() == Qt::LeftButton) {
-        m_renderer->doubleClickEvent(event->x(), event->y());
+        m_renderer->doubleClickEvent(event->position().x(), event->position().y());
     }
     if (m_renderer->m_selectedTrace.isEmpty()) {
             // This is really poorly done!!!
             m_ySelectedLabel.clear();
-            ySelectedLabelChanged();
+            emit ySelectedLabelChanged();
     }
     else {
         updateYSelectLabels();
@@ -238,7 +246,7 @@ void TraceDisplay::updateYSelectLabels()
             tempValue = (tempValue / (m_renderer->getGlobalScaling() * trace.scale)) * (float)m_renderer->getNumOffets();
             m_ySelectedLabel.append(QString::number(tempValue,'f',2) + trace.units);
         }
-        ySelectedLabelChanged();
+        emit ySelectedLabelChanged();
     }
 }
 
@@ -311,7 +319,7 @@ TraceDisplayRenderer::TraceDisplayRenderer(QObject *parent, QSize displayWindowS
     m_lastTimeDisplayed = startTime;
 
     initPrograms();
-    float c[] = {0.5,0.7,1.0};
+    //float c[] = {0.5,0.7,1.0};
     bufNum = 0;
     numData[0] = 10;
     numData[1] = 10;
@@ -917,7 +925,7 @@ void TraceDisplayRenderer::paint()
     glDisable(GL_DEPTH_TEST);
 
     int pastScrollBarPos = m_viewportSize.width() * std::fmod((m_lastTimeDisplayed - m_softwareStartTime)/1000.0f, windowSize) / windowSize;
-    int clearWidth = ((currentTime - m_lastTimeDisplayed)/1000.0) / windowSize * m_viewportSize.width();
+   // int clearWidth = ((currentTime - m_lastTimeDisplayed)/1000.0) / windowSize * m_viewportSize.width();
 
     if (m_clearDisplayOnNextDraw == true) {
         m_clearDisplayOnNextDraw = false;
@@ -996,8 +1004,10 @@ void TraceDisplayRenderer::paint()
 
 }
 
-void TraceDisplayRenderer::doubleClickEvent(int x, int y)
+void TraceDisplayRenderer::doubleClickEvent(int x,int y)
 {
+    Q_UNUSED(x);
+
     if (m_selectedTrace.isEmpty()){
         // currently no trace selected
 

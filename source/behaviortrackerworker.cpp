@@ -10,6 +10,8 @@
 #include <QThread>
 #include <QDir>
 
+
+
 #ifdef USE_PYTHON
  #undef slots
  #include <Python.h>
@@ -51,15 +53,40 @@ void BehaviorTrackerWorker::initPython()
         if (QDir(m_btConfig["pyEnvPath"].toString() + "/Lib/site-packages/numpy/.libs").exists()) {
 
             // likely a correct path
-            Py_SetPythonHome(m_btConfig["pyEnvPath"].toString().toStdWString().c_str());
-            Py_Initialize();
+            //Py_SetPythonHome(m_btConfig["pyEnvPath"].toString().toStdWString().c_str());
+            //Py_Initialize();
+            //m_PythonInitialized = true;
+            //PyObject* sysPath = PySys_GetObject((char*)"path");
+            // PyConfig 구조체 사용
+            PyConfig config;
+            PyConfig_InitPythonConfig(&config);
+
+            std::wstring pyEnvPath = m_btConfig["pyEnvPath"].toString().toStdWString();
+            PyStatus status = PyConfig_SetString(&config, &config.home, pyEnvPath.c_str());
+            if (PyStatus_Exception(status)) {
+                PyConfig_Clear(&config);
+                return;
+            }
+
+            // Python 초기화
+            status = Py_InitializeFromConfig(&config);
+            if (PyStatus_Exception(status)) {
+                PyConfig_Clear(&config);
+                return;
+            }
+
             m_PythonInitialized = true;
-            PyObject* sysPath = PySys_GetObject((char*)"path");
+
+            // sys.path 가져오기
+            //PyObject* sysPath = PySys_GetObject("path");  // 여기서 char* 대신 const char* 사용
+
+            // PyConfig 해제
+            PyConfig_Clear(&config);
     //        qDebug() << "SYS PATH" << sysPath;
     //        QString pathToLib = m_btConfig["pyEnvPath"].toString() + "/Library/bin";
     //        PyList_Append(sysPath, PyUnicode_FromString(pathToLib.toStdString().c_str()));
-            PyList_Append(sysPath, PyUnicode_FromString(".")); // appends path with current dir
-            Py_DECREF(sysPath);
+           // PyList_Append(sysPath, PyUnicode_FromString(".")); // appends path with current dir
+           // Py_DECREF(sysPath);
         }
         else {
             m_PythonError = ERROR_NUMPY_DLL;
@@ -76,9 +103,20 @@ void BehaviorTrackerWorker::initPython()
 #endif
 }
 
+//int BehaviorTrackerWorker::initNumpy()
+//{
+//    import_array1(-1);
+//    return 0;
+//}
+
 int BehaviorTrackerWorker::initNumpy()
 {
-    import_array1(-1);
+    // Numpy 초기화
+    if (PyArray_API == NULL) {
+        import_array1(-1);
+    }
+    // 성공 시 0 반환
+    return 0;
 }
 
 void BehaviorTrackerWorker::setUpDLCLive()

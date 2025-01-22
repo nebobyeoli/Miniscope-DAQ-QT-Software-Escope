@@ -23,8 +23,8 @@
 DataSaver::DataSaver(QObject *parent) :
     QObject(parent),
     baseDirectory(""),
-    m_recording(false),
     behaviorTrackerEnabled(false),
+    m_recording(false),
     m_running(false)
 
 {
@@ -39,8 +39,8 @@ bool DataSaver::setupFilePaths()
     if (!QDir(baseDirectory).exists()) {
         if(!QDir().mkpath(baseDirectory)) {
             qDebug() << "Could not make path: " << baseDirectory;
-            sendMessage("Error: Data folder structure failed to be created.");
-            sendMessage("Error: Close program and correct User Config file.");
+            emit sendMessage("Error: Data folder structure failed to be created.");
+            emit sendMessage("Error: Close program and correct User Config file.");
             return false;
             // TODO: When this happens stop recording
         }

@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
     backEnd backend;
     engine.rootContext()->setContextProperty("backend", &backend);
 
-
 //    QObject *rootObject = engine.rootObjects().first();
 //    QTreeView *qmlObject = engine.rootObjects().first()->findChild<QTreeView*>("treeView");
 

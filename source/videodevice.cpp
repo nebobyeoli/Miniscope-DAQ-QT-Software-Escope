@@ -148,7 +148,7 @@ void VideoDevice::createView()
 {
     if (m_camConnected != 0) {
         if (m_camConnected == 1)
-             emit sendMessage(m_deviceName + " connected using Direct Show.");
+            emit sendMessage(m_deviceName + " connected using Direct Show.");
         else if (m_camConnected == 2)
             emit sendMessage(m_deviceName + " couldn't connect using Direct Show. Using computer's default backend.");
         else if (m_camConnected == 3)

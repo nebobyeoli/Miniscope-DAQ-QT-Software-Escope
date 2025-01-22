@@ -1,0 +1,410 @@
+==> 전체 36개 print됨
+
+==> GUI에서는 12개 print됨 (스크롤 안 돼서 그런 듯)
+
+hasChildren: 0 && -model.key: undefined
+==> 12개 (개수 일치 X) (뭐가 12개지?) (print m_jsonTreeModel에서 그냥 "Bool"형태는 11개임)
+    (hasChildren이거나 model.key 읽어지는 항목들 36-12=24개)
+    print m_jsonTreeModel: end of children 항목 24개
+    ==> 자식 있는 항목 개수 일치 확인 (?)
+
+
+
+
+
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: animalName
+-model.value: Fully Ball
+-model.type: String
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: behaviorTracker
+-model.value: 
+-model.type: Object
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: customEntry0
+-model.value: customEntValHere
+-model.type: String
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: dataDirectory
+-model.value: C:/FILL/OUT/THIS/PATH
+-model.type: DirPath
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: devices
+-model.value: 
+-model.type: Object
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: directoryStructure
+-model.value: 
+-model.type: Array(String)
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: executableOnStartRecording
+-model.value: 
+-model.type: Object
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: executableOnStopRecording
+-model.value: 
+-model.type: Object
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: experimentName
+-model.value: Experiment0
+-model.type: String
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: recordLengthinSeconds
+-model.value: 600
+-model.type: Integer
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 0
+-model.key: researcherName
+-model.value: Dr_Miniscope
+-model.type: String
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 0
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: true
+expanded: false
+hasChildren: 1
+-model.key: traceDisplay
+-model.value: 
+-model.type: Object
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString
+qml: 
+
+
+qml: treeView: QQuickTreeView(0x246091b4f80, "treeView")
+isTreeNode: false
+expanded: false
+hasChildren: 1
+-model.key: undefined
+-model.value: undefined
+-model.type: undefined
+qrc:/main.qml:306:25: Unable to assign [undefined] to QString

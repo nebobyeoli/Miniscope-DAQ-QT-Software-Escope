@@ -1,10 +1,15 @@
 import QtQuick //2.12
-import QtQuick.Window 2.12
+import QtQuick.Window // 2.12
 import QtQuick.Controls //2.15//2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs //import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Basic
 import Qt.labs.platform 1.0
+
+import Qt.labs.qmlmodels
+
+
+// import "TreeViewerJson.qml" // "no such directory"
 
 
 Window {
@@ -17,9 +22,8 @@ Window {
     title: qsTr("Miniscope DAQ")
 
 
-
     FileDialog {
-        // user config file 선택하는 데에 사용
+        // Used to select user config file
 
         id: fileDialog
         title: "Please choose a user configuration file."
@@ -27,7 +31,7 @@ Window {
         folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
         nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
-            //file name을 c++ 백엔드로 보냄
+            // Send file name to c++ backend
 
             let file = fileDialog.file; // `file` 속성 사용
             console.log("Selected file (file): ", file);
@@ -82,10 +86,10 @@ Window {
                 font.family: "Arial"
                 wrapMode: Text.WordWrap
                 MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
+                    anchors.fill: parent
+                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                }
             }
             Button {
                 text: "Close"
@@ -223,40 +227,254 @@ Window {
 
             }
         }
+        
+        // TableView {
+        //     visible: true
+        //     model: TableModel {
+        //         TableModelColumn {
+        //             display: "key"
+        //         }
+        //         TableModelColumn {
+        //             display: "value"
+        //         }
+        //         TableModelColumn {
+        //             display: "type"
+        //         }
+        //     }
+        //     Component.onCompleted: {
+        //         console.log("tablemodel loaded")
+        //         console.log(treeView.visible)
+        //     }
+        //     // visible: treeView.visible
+        //     // TextArea { font.pointSize: 12 }
+        // }
+
+        // TableView {
+        //     anchors.fill: parent
+        //     // Layout.alignment: Qt.AlignLeft
+            
+        //     visible: treeView.visible  // enabled과의 차이=?
+        //     columnSpacing: 0
+        //     rowSpacing: 0
+        //     clip: true
+        //     model: TableModel {
+        //         TableModelColumn { display: "key" }
+        //         TableModelColumn { display: "value" }
+        //         TableModelColumn { display: "type" }
+
+        //         rows: [{"key": "1", "value":"2", "type":"3"}]
+        //     }
+
+        //     delegate: Rectangle {
+        //         implicitWidth: 100
+        //         implicitHeight: 50
+        //         border.width: 1; color: "lightgray"
+        //         Text {
+        //             text: display
+        //             anchors.centerIn: parent
+        //         }
+        //     }
+        // }
+
         ColumnLayout {
-            TreeView {
-                id: treeView
-                objectName: "treeView"
-                model: backend.jsonTreeModel
-                visible: false
-                Layout.rowSpan: 4
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                implicitHeight: 100
-                columnWidthProvider: (column) => column === 0 ? 200 : 100
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                delegate: Item {
-                    width: parent.width
-                    height: 50 // 높이를 명시적으로 설정
-                    implicitHeight: 40
+            /* 헤더 (Key Value Type) 표시 */
 
-                    RowLayout {
-                        Text { text: model.key ; Layout.alignment: Qt.AlignLeft }
+            Row {
+                // Column { Rectangle { border.width: 1; width: headerRow.roleW; height: headerRow.roleH; color: "lightgray";  Text { text: "key"; anchors.fill: parent; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter } } }
+                // Column { Rectangle { border.width: 1; width: headerRow.roleW; height: headerRow.roleH; color: "lightgray";  Text { text: "value"; anchors.fill: parent; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter } } }
+                // Column { Rectangle { border.width: 1; width: headerRow.roleW; height: headerRow.roleH; color: "lightgray";  Text { text: "type"; anchors.fill: parent; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter } } }
 
-                        TextField {
-                            text: model.value !== undefined && model.value !== "" ? model.value : "N/A"
-                            enabled: model.type !== "Object" && model.type !== "Array"
-                            onEditingFinished: {
-                                backend.treeViewTextChanged(currentIndex, text);
-                            }
+                id: headerRow
+                // spacing: 0
+                // Layout.fillHeight: false; Layout.fillWidth: true
+
+                Layout.preferredHeight: 24  // 그냥 height:는 무시됨
+                visible: treeView.visible  // enabled과의 차이=?
+
+                readonly property int roleH:  30;  // row 높이
+                readonly property int roleW:  (Window.width - treeView.labelRectW - 10*2) / 3;
+
+                Layout.alignment: Qt.AlignLeft
+                // Layout.alignment: parent
+                // anchors.fill: parent
+
+
+                z: 1  /* headerRow가 항상 맨 위에 그려지게 함 */
+
+                TextField {
+                    // anchors.fill: parent // do not use anchors for child items directly inside Row/RowLayout
+                    color: "black"
+                    Layout.fillHeight: false; Layout.fillWidth: false
+                    height: headerRow.roleH; width: headerRow.roleW + treeView.labelRectW
+                    enabled: false
+                    text: "Key"
+                }
+
+                TextField {
+                    color: "black"
+                    Layout.fillHeight: false; Layout.fillWidth: false
+                    height: headerRow.roleH; width: headerRow.roleW
+                    enabled: false
+                    text: "Value"
+                }
+
+                TextField {
+                    color: "black"
+                    Layout.fillHeight: false; Layout.fillWidth: false
+                    height: headerRow.roleH; width: headerRow.roleW
+                    enabled: false
+                    text: "Type"
+                }
+            }
+
+            /* 각 항목들 (TreeView Items) 표시 */
+
+            RowLayout {
+                TreeView {
+                    id: treeView
+                    objectName: "treeView"
+                    model: backend.jsonTreeModel
+                    
+                    visible: false
+                    // Layout.rowSpan: 4  // = ??
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    implicitHeight: 100
+                    // columnWidthProvider: (column) => column === 0 ? 200 : 100  // no effect?
+                    Layout.alignment: Qt.AlignLeft // Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    property string toolTipText: ""
+
+                    readonly property int itemH:  30;  // row 높이
+                    readonly property int itemW:  headerRow.roleW;
+
+                    readonly property int labelRectH:  itemH - 2;
+                    readonly property int labelRectW:  12;
+
+                    delegate: Item {
+                        id: treeItem
+                        implicitHeight: treeView.itemH  // row 높이 간격
+                        width: parent.width // width: console.log("parent.width: " + parent.width)?parent.width:parent.width //했더니 50,50,...,50,400,400,400 출력됨 // qml에서 console로 출력하는 방법
+
+                        readonly property real indentation: 5
+                        readonly property real padding: 100
+
+                        // Assigned to by TreeView:
+                        required property TreeView treeView
+                        required property bool isTreeNode
+                        required property bool expanded
+                        required property int hasChildren
+                        required property int depth
+                        required property int row
+                        required property int column
+                        required property bool current
+                        
+                        // qml에서 출력하는 법: Component.onCompleted: console.log("text here") 사용
+                        Component.onCompleted: {
+                            console.log("\n\n")
+                            console.log(
+                            "treeView: "+treeView  // QQuickTreeView(0x1ff1be772c0, "treeView")
+                            +"\nisTreeNode: "+isTreeNode
+                            +"\nexpanded: "+expanded
+                            +"\nhasChildren: "+hasChildren
+                            +"\ndepth: "+depth  // 다 0
+                            +"\n-model.key: "+model.key
+                            +"\n-model.value: "+model.value
+                            +"\n-model.type: "+model.type)
+                            // +"\n-model.parent.type: "+model.parent // undefined
+                            // +"\n")
+                            // +"\n\n")
+                            // console.log(model.type==undefined)
+                            // +"\nmodel.type==QString: "+(model.type==QString)+"\n\n")
+                            // console.log("model.value: ")
+                            // console.log(QType(model.value))
                         }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            //root.toolTipText = model.tips ? model.tips : "No tips available";
-                            console.log("Clicked cell. Tips:", model.tips);
+                        
+                        Row {
+                            Layout.alignment: Qt.AlignLeft
+                            anchors.fill: parent
+
+                            Component.onCompleted: console.log("padding: "+treeItem.padding+", indentation: "+treeItem.indentation);
+                            Rectangle {
+                                height: treeView.labelRectH; width: (depth + 1)*treeView.labelRectW
+                                color: "transparent" // color: "yellow"
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Label {
+                                    id: indicator
+                                    visible: isTreeNode && hasChildren
+                                    // x: treeItem.padding + (depth * treeItem.indentation)
+                                    
+                                    anchors.horizontalCenter: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: treeView.isExpanded(row) ? "▼   " : "▶  "  // 공백문자는 토글문자가 너무 오른쪽으로 넘어가는 것을 방지하기 위함
+                                }
+
+                                TapHandler {
+                                    onSingleTapped: {
+                                        treeView.toggleExpanded(row)
+                                    }
+                                }
+                            }
+
+                            /* Key */
+                            TextField {
+                                // anchors.fill: parent // do not use anchors for child items directly inside Row/RowLayout
+                                Layout.fillHeight: true; Layout.fillWidth: false
+                                height: treeView.itemH; width: treeView.itemW
+                                readOnly: true
+
+                                text: model.key ? model.key : "-"
+                                Component.onCompleted: console.log("[key] width: " + width); // 200
+
+                                /* Show Tool Tip when each "Key" area is clicked */
+                                Rectangle {
+                                    height: treeView.itemH; width: treeView.itemW;
+                                    color: "transparent" // color: "yellow"
+
+                                    TapHandler {
+                                        onSingleTapped: {
+                                            treeView.toolTipText = "<b><i>"+model.key+"</i></b><br>" + (model.tips ? model.tips : "No tips available");
+                                            console.log("Clicked cell. Tips: " + model.tips);
+                                        }
+                                    }
+                                }
+                            }
+
+                            /* Value */
+                            TextField {
+                                Layout.fillHeight: true; Layout.fillWidth: false
+                                height: treeView.itemH; width: treeView.itemW
+                                enabled: !indicator.visible
+                                // enabled: (model.type !== "Object") && (model.type !== "Array")
+
+                                CheckBox {
+                                    visible: model.type === "Bool" // singular bool이므로 indicator.visible 확인 필요X
+                                    checked: (model.value === true) || (model.value === "true")
+                                    onClicked: backend.treeViewTextChanged(/*currentIndex*/treeView.index(row, column), checked/*함수내에서 QString으로 변환됨*/);
+                                    anchors.centerIn: parent
+                                }
+
+                                readOnly: model.type === "Bool";
+                                text: indicator.visible ? "Toggle to edit values" : (model.type !== "Bool" ? (model.value ? model.value : "") : "")
+                                onEditingFinished: {
+                                    if (model.type !== "Bool") backend.treeViewTextChanged(treeView.index(row, column), text);
+                                }
+
+                                Component.onCompleted: console.log("[value] width: " + width); // 45 ~ 70
+                            }
+
+                            /* Type */
+                            TextField {
+                                Layout.fillHeight: true; Layout.fillWidth: false
+                                height: treeView.itemH; width: treeView.itemW - depth*treeView.labelRectW
+                                enabled: false; color: "black"
+
+                                // text: (model.type === "Unknown") ? "<i>Unknown</i>" : (model.type ? model.type : "---"); // rich text only
+                                text: model.type ? model.type : "---"
+                                Component.onCompleted: console.log("[type] width: " + width); // 45 ~ 70
+                            }
                         }
                     }
                 }
@@ -280,7 +498,7 @@ Window {
 
                 TextArea {
                     id: toolTipTextArea
-                    text: "<b>Tool Tip:</b> " + treeView.toolTipText
+                    text: "<b style=\"white-space:pre-wrap;\">Tool Tip:  </b>" + treeView.toolTipText
                     visible: treeView.visible
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignTop
@@ -293,27 +511,9 @@ Window {
 
                     // 배경 색상 및 테두리 추가
                     background: Rectangle {
-                    color: "#f9f9f9"
-                    border.color: "#cccccc"
-                    border.width: 1
-                    /*ScrollBar {
-                        enabled: true
-                    }
-
-                    text: "<b>Tool Tip:</b> " + treeView.toolTipText
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignTop
-                    visible: treeView.visible
-
-    //                height: 200
-                    Layout.fillHeight: true
-
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    readOnly: true
-                    wrapMode: TextArea.WordWrap
-                    textFormat: Text.RichText
-                    font.pointSize: 12*/
+                        color: "#f9f9f9"
+                        border.color: "#cccccc"
+                        border.width: 1
                     }
                 }
             }
@@ -334,9 +534,9 @@ Window {
             TextArea {
                 id: taConfigDesc
                 text: backend.userConfigDisplay
-//                wrapMode: Text.NoWrap
+                // wrapMode: Text.NoWrap
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                            //    anchors.fill: parent
+                                //                anchors.fill: parent
                 font.pointSize: 12
                 readOnly: true
                 Layout.fillWidth: true
@@ -353,12 +553,12 @@ Window {
                 }
 
                 DropArea {
-                    id: drop
+                    id: drop1
                     anchors.fill: parent
                     onDropped: {
                         // Send file name to c++ backend
-                        if (drop.hasUrls) {
-                            backend.userConfigFileName = drop.urls[0];
+                        if (drop1.hasUrls) {
+                            backend.userConfigFileName = drop1.urls[0];
                             backend.userConfigFileNameChanged();
                             treeView.visible = true;
                             view.visible = false;
@@ -374,7 +574,7 @@ Window {
         RoundButton {
             id: rbRun
             height: 40
-            //implicitHeight: 40
+            // implicitHeight: 40
             radius: 10
             text: "Run"
             enabled: backend.userConfigOK
@@ -451,7 +651,7 @@ Window {
                 }
                 onHoveredChanged: hovered ? exitRect.color = "#f8a7fd" : exitRect.color = "#a8a7fd"
                 onClicked: backend.exitClicked()
-//                onClicked: Qt.quit()
+                // onClicked: Qt.quit()
             }
         }
 
@@ -472,6 +672,7 @@ Window {
         }
     }
     Component.onCompleted: {
+        // Set window position to center of screen
         setX(Screen.width / 2 - width / 2);
         setY(Screen.height / 2 - height / 2);
     }

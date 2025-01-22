@@ -1,3 +1,5 @@
+# QT       += core gui
+# greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT += qml quick widgets gui core
 CONFIG += c++11
 
@@ -8,30 +10,33 @@ CONFIG += c++11
 # depend on your compiler). Refer to the documentation for the
 # deprecated API to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
-
-DEFINES += DEBUG
+#DEFINES += DEBUG
 #DEFINES += USE_USB
 DEFINES += USE_PYTHON
 
-# You can also make your code fail to compile if it uses deprecated APIs.
+
+# You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        backend.cpp \
-        behaviorcam.cpp \
-        behaviortracker.cpp \
-        behaviortrackerworker.cpp \
-        controlpanel.cpp \
-        datasaver.cpp \
-        main.cpp \
-        miniscope.cpp \
-        newquickview.cpp \
-        tracedisplay.cpp \
-        videodevice.cpp \
-        videodisplay.cpp \
-        videostreamocv.cpp
+    backend.cpp \
+    behaviorcam.cpp \
+    behaviortracker.cpp \
+    behaviortrackerworker.cpp \
+    controlpanel.cpp \
+    datasaver.cpp \
+    main.cpp \
+    miniscope.cpp \
+    newquickview.cpp \
+    tracedisplay.cpp \
+    videodevice.cpp \
+    videodisplay.cpp \
+    videostreamocv.cpp
+# FORMS += \
+#     mainwindow.ui
+
+
 
 RESOURCES += qml.qrc
 
@@ -49,6 +54,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+
+
 HEADERS += \
     backend.h \
     behaviorcam.h \
@@ -64,12 +71,17 @@ HEADERS += \
     videostreamocv.h
 
 DISTFILES += \
+    # ../Python/DLCwrapper.py \
     ../Scripts/DLCwrapper.py \
     ../deviceConfigs/behaviorCams.json \
     ../deviceConfigs/miniscopes.json \
     ../deviceConfigs/userConfigEscope1.json \
     ../deviceConfigs/userConfigProps.json \
     ../deviceConfigs/videoDevices.json
+
+
+
+# Linkers for OpenCV & Python
 
 win32 {
     # Path to your openCV .lib file(s)

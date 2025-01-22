@@ -332,7 +332,7 @@ void Miniscope::setupBNOTraceDisplay()
         QString name;
         bool sameOffset;
         int count = 0;
-        int idx=0;
+        int idx = 0;
         for (int i=0; i < tempArray.size(); i++) {
             name = tempArray[i].toString();
             if (name == "roll" || name == "Roll") {

@@ -1,14 +1,22 @@
-# TestingEscope
+# Miniscope-DAQ-QT-Software-Escope
+
+Neural and behavior control and recording software for the Ewha NEE Dual Color Miniscope Project
+
+Currently used versions:
+
+- Qt 6.7.2
+- Python 3.11
+- Numpy 2.1.1
+- OpenCV 4.10.0
 
 <br>
 
-# Miniscope-DAQ-QT-Software
+
+# [Miniscope-DAQ-QT-Software](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software)
 
 **[[Miniscope V4 Wiki](https://github.com/Aharoni-Lab/Miniscope-v4/wiki)] [[Miniscope DAQ Software Wiki](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/wiki)] [[Miniscope DAQ Firmware Wiki](https://github.com/Aharoni-Lab/Miniscope-DAQ-Cypress-firmware/wiki)] [[Miniscope Wire-Free DAQ Wiki](https://github.com/Aharoni-Lab/Miniscope-Wire-Free-DAQ/wiki)] [[Miniscope-LFOV Wiki](https://github.com/Aharoni-Lab/Miniscope-LFOV/wiki)][[2021 Virtual Miniscope Workshop Recording](https://sites.google.com/metacell.us/miniscope-workshop-2021)]**
 
 Neural and behavior control and recording software for the UCLA Miniscope Project
-
-**Make sure to click Watch and Star in the upper right corner of this page to get updates on new features and releases.**
 
 <p align="center">
   <img width="600" src="https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/blob/master/wikiImg/miniscope_bright.png ">

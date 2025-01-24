@@ -132,9 +132,9 @@ Window {
 
     MessageDialog {
         id: saveMessageDialog
-        property string fName: backend.userConfigFileName
         title: "User Config File Saved"
-        text:  "The user config file has been saved to " + fName.replace(".json", "_new.json")
+        property string fName: backend.userConfigFileName
+        text: "The user config file has been saved to:\n\n" + fName.replace(".json", "_" + backend.getDateTimeNowString() + ".json")
         onAccepted: {
             visible = false
         }
@@ -222,6 +222,8 @@ Window {
 
                     backend.saveConfigObject()
                     saveMessageDialog.visible = true
+                    saveMessageDialog.text = "The user config file has been saved to:\n\n" + backend.getUserConfigSavedName()
+                    
                 }
                 onHoveredChanged: hovered ? configSaveRect.color = "#f8a7fd" : configSaveRect.color = "#a8a7fd"
 
@@ -426,6 +428,11 @@ Window {
                                 readOnly: true
 
                                 text: model.key ? model.key : "-"
+                                background: Rectangle {
+                                    color: "white"
+                                    border.color: "#cccccc"
+                                }
+
                                 Component.onCompleted: console.log("[key] width: " + width); // 200
 
                                 /* Show Tool Tip when each "Key" area is clicked */
@@ -458,6 +465,12 @@ Window {
 
                                 readOnly: model.type === "Bool";
                                 text: indicator.visible ? "Toggle to edit values" : (model.type !== "Bool" ? (model.value ? model.value : "") : "")
+                                color: indicator.visible ? "gray" : "black"
+                                background: Rectangle {
+                                    color: indicator.visible ? "#f9f9f9" : "white"
+                                    border.color: "#cccccc"
+                                }
+                        
                                 onEditingFinished: {
                                     if (model.type !== "Bool") backend.treeViewTextChanged(treeView.index(row, column), text);
                                 }
@@ -473,6 +486,7 @@ Window {
 
                                 // text: (model.type === "Unknown") ? "<i>Unknown</i>" : (model.type ? model.type : "---"); // rich text only
                                 text: model.type ? model.type : "---"
+                                
                                 Component.onCompleted: console.log("[type] width: " + width); // 45 ~ 70
                             }
                         }
@@ -657,20 +671,26 @@ Window {
 
     }
 
-    Connections{
+    Connections {
         target: backend
         //onShowErrorMessage: errorMessageDialog.visible = true
-        function  onShowErrorMessage(){
+        function onShowErrorMessage() {
             errorMessageDialog.visible = true;
         }
     }
-    Connections{
+    Connections {
         target: backend
         //onShowErrorMessageCompression: errorMessageDialogCompression.visible = true
         function onShowErrorMessageCompression() {
             errorMessageDialogCompression.visible = true;
         }
     }
+    // Connections {
+    //     target: backend
+    //     function onTextChanged() {
+    //         saveMessageDialog.text = text;
+    //     }
+    // }
     Component.onCompleted: {
         // Set window position to center of screen
         setX(Screen.width / 2 - width / 2);

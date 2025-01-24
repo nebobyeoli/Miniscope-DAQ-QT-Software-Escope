@@ -590,7 +590,6 @@ QStandardItem *backEnd::handleJsonArray(QStandardItem *parent, QJsonArray arry, 
 
 void backEnd::generateUserConfigFromModel()
 {
-
     // void forEach(QAbstractItemModel* model, QModelIndex parent = QModelIndex()) {
     //     for(int r = 0; r < model->rowCount(parent); ++r) {
     //         QModelIndex index = model->index(r, 0, parent);
@@ -723,33 +722,38 @@ QJsonArray backEnd::getArrayFromModel(QModelIndex idx)
     QJsonArray jAry;
 
     QString key, value, type;
+    QString asType;
 
     for (int i=0; i < m_jsonTreeModel->rowCount(idx); i++) {
         QModelIndex index = m_jsonTreeModel->index(i, 0, idx);
-        qDebug() << m_jsonTreeModel->data(index, Qt::DisplayRole).toString();
+        // qDebug() << m_jsonTreeModel->data(index, Qt::UserRole).toString(); // ""
+
         key = m_jsonTreeModel->data(index, Qt::UserRole + 1).toString();
         value = m_jsonTreeModel->data(index, Qt::UserRole + 2).toString();
         type = m_jsonTreeModel->data(index, Qt::UserRole + 3).toString();
+        
+        asType = type;
+        
         if (type == "Object") {
             jAry.append(getObjectFromModel(index));
         }
         else if (type.left(5) == "Array") {
-             jAry.append(getArrayFromModel(index));
+            jAry.append(getArrayFromModel(index));
         }
         else if (type == "String" || type == "DirPath" || type == "FilePath" || type == "CameraDeviceType" || type == "MiniscopeDeviceType") {
-            qDebug() << "STRRRRIIINNNGGG" << value;
+            asType = "String";
             jAry.append(value);
         }
         else if (type == "Bool") {
-            if (value == "true")
-                jAry.append(true);
-            else if (value == "false")
-                jAry.append(false);
+            if (value == "true")        jAry.append(true);
+            else if (value == "false")  jAry.append(false);
         }
         else if (type == "Number" || type == "Integer" || type == "Double") {
+            asType = "Double";
             jAry.append(value.toDouble());
         }
 
+        qDebug() << "Saved [" << key << "," << value << "," << type << "] as:" << asType;
     }
 
     return jAry;
@@ -761,13 +765,22 @@ void backEnd::saveConfigObject()
     QJsonDocument d;
     d.setObject(m_userConfig);
     QFile file;
-    QString fName = m_userConfigFileName;
-    fName.chop(5);
-    fName.append("_new.json");
-    file.setFileName(fName);
+    file.setFileName(getUserConfigSavedName());
     file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
     file.write(d.toJson());
     file.close();
+}
+
+QString backEnd::getUserConfigSavedName()
+{
+    QString fName = m_userConfigFileName;
+    fName.replace(".json", "_" + getDateTimeNowString() + ".json");
+    return fName;
+}
+
+QString backEnd::getDateTimeNowString()
+{
+    return QDateTime::currentDateTime().toString("yyyyMMdd-HHmmss");
 }
 
 void backEnd::loadUserConfigFile()

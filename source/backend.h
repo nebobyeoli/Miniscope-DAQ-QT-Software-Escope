@@ -59,6 +59,8 @@ public:
 
     void printJsonTreeModel(QAbstractItemModel*, QModelIndex, int);
     void printForEach(QAbstractItemModel*, QModelIndex, int, QString);
+    Q_INVOKABLE QString getDateTimeNowString();
+    Q_INVOKABLE QString getUserConfigSavedName();
 
 
     // 아래 6개 모두 config 화면 GUI에는 사용되지 않음

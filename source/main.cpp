@@ -17,13 +17,12 @@
 //C:\Qt\5.12.6>C:\Qt\5.12.6\msvc2017_64\bin\windeployqt.exe --qmldir C:\Users\DBAharoni\Documents\Projects\Miniscope-DAQ-QT-Software\Miniscope-DAQ-QT-Software\ C:\Users\DBAharoni\Documents\Projects\Miniscope-DAQ-QT-Software\build-Miniscope-DAQ-QT-Software-Desktop_Qt_5_12_6_MSVC2017_64bit-Release\release\Miniscope-DAQ-QT-Software.exe
 int main(int argc, char *argv[])
 {
-    //qt6 불필요 QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
     QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
     QGuiApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+    // QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // Qt 6: 불필요
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv); // QGuiApplication app(argc, argv);
 
     qRegisterMetaType < QVector<quint8> >("QVector<quint8>");
 

@@ -78,3 +78,8 @@ build*
 *.dll
 *.exe
 
+# My User Configs saved test files
+My User Configs/*_2025*.json
+
+# test folder
+webcamTest/

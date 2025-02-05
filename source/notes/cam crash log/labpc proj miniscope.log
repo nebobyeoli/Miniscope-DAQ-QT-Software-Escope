@@ -1,0 +1,34 @@
+Saved [ "" , "roll" , "String" ] as: "String"
+Saved [ "" , "pitch" , "String" ] as: "String"
+Saved [ "" , "yaw" , "String" ] as: "String"
+Saved [ "" , "researcherName" , "String" ] as: "String"
+Saved [ "" , "experimentName" , "String" ] as: "String"
+Saved [ "" , "animalID" , "String" ] as: "String"
+Saved [ "" , "date" , "String" ] as: "String"
+Saved [ "" , "time" , "String" ] as: "String"
+Screen size is  1920  x  1080
+ucProps append: "animalID" 		ucValues append: "ID42"
+ucProps append: "animalName" 		ucValues append: "testMouse"
+ucProps append: "dataDirectory" 		ucValues append: "C:/Escope/Miniscope-DAQ-QT-Software-Escope/camTest"
+ucProps append: "experimentName" 		ucValues append: "Linear Track Test"
+ucProps append: "recordLengthinSeconds" 		ucValues append: 0
+ucProps append: "researcherName" 		ucValues append: "Dr_Miniscope"
+ucProps append: "test" 		ucValues append: "TEST"
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+m_resolution: QSize(-1, -1)
+VideoStreamOCV constructor called: width -1 height -1 pixelClock -1
+deviceStream: -1 x -1 , -1
+QJsonObject({"ROI":{"height":600,"leftEdge":0,"topEdge":0,"width":600},"compression":"FFV1","deviceID":1,"deviceName":"Miniscope","deviceType":"Miniscope_V4_BNO","ewl":50,"frameRate":"20FPS","framesPerFile":1000,"gain":"Low","headOrientation":{"enabled":true,"filterBadData":true,"plotTrace":["roll","pitch","yaw"]},"led0":10,"showSaturation":true,"streamHeadOrientation_OLD":true,"windowScale":0.75,"windowX":800,"windowY":100})
+Camera 1
+connnect2Camera() running
+cam open: connectionType "DSHOW"
+connectionState != 0, cam->set: 1280 x 720
+"Miniscope" "FFV1" 827737670
+Retieve failed: Releasing cam 1
+15:15:43: C:\Escope\Miniscope-DAQ-QT-Software-Escope\source\build\Desktop_Qt_6_7_2_MinGW_64_bit-Release\release\Miniscope-DAQ-QT-Software-Escope.exe crashed.

@@ -1,0 +1,24 @@
+Saved [ "" , "researcherName" , "String" ] as: "String"
+Saved [ "" , "experimentName" , "String" ] as: "String"
+Saved [ "" , "animalName" , "String" ] as: "String"
+Saved [ "" , "date" , "String" ] as: "String"
+Saved [ "" , "time" , "String" ] as: "String"
+Screen size is  1920  x  1080
+ucProps append: "animalName" 		ucValues append: "testMouse"
+ucProps append: "dataDirectory" 		ucValues append: "C:/Escope/Miniscope-DAQ-QT-Software-Escope/webcamTest"
+ucProps append: "experimentName" 		ucValues append: "Linear Track Test"
+ucProps append: "recordLengthinSeconds" 		ucValues append: 600
+ucProps append: "researcherName" 		ucValues append: "Dr_Miniscope"
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+qrc:/ControlPanel.qml:214:37: Unable to assign [undefined] to QString
+m_resolution: QSize(-1, -1)
+VideoStreamOCV constructor called: width -1 height -1 pixelClock -1
+deviceStream: -1 x -1 , -1
+QJsonObject({"ROI":{"height":480,"leftEdge":0,"topEdge":0,"width":640},"compression":"FFV1","deviceID":0,"deviceName":"BehavCam 0","deviceType":"WebCam-1280x720","framesPerFile":1000,"showSaturation":true,"windowScale":0.75,"windowX":800,"windowY":600})
+Camera 0
+connnect2Camera() running
+cam open: connectionType "DSHOW"
+15:50:29: C:\Escope\Miniscope-DAQ-QT-Software-Escope\source\build\Desktop_Qt_6_7_2_MinGW_64_bit-Release\release\Miniscope-DAQ-QT-Software-Escope_personalPC.exe crashed.

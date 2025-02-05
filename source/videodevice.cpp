@@ -50,7 +50,9 @@ VideoDevice::VideoDevice(QObject *parent, QJsonObject ucDevice, qint64 softwareS
 
     // Setup OpenCV camera stream
     m_resolution = QSize(m_cDevice["width"].toInt(-1), m_cDevice["height"].toInt(-1));
+    qDebug() << "m_resolution:" << m_resolution;
     deviceStream = new VideoStreamOCV(nullptr, m_cDevice["width"].toInt(-1), m_cDevice["height"].toInt(-1), m_cDevice["pixelClock"].toDouble(-1));
+    qDebug() << "deviceStream:" << m_cDevice["width"].toInt(-1) << "x" << m_cDevice["height"].toInt(-1) << "," << m_cDevice["pixelClock"].toDouble(-1);
     deviceStream->setDeviceName(m_deviceName);
 
     // Checks to make sure user config and miniscope device type are supporting BNO streaming

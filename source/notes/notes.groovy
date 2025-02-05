@@ -271,11 +271,29 @@ alignments:
 
 
 
-다음으로 할 일:
-    qml -> UI
-    main.qml에서 하나씩 주석추가/해제하는건 어디서 밀림 발생하는거??
-    multiple columns in treeview "bug" qml....
 
+main.cpp
+--------
+QQmlApplicationEngine engine;
+const QUrl url(QStringLiteral("qrc:/main.qml"));
+QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                    &app, [url](QObject *obj, const QUrl &objUrl) {
+    if (!obj && url == objUrl)
+        QCoreApplication::exit(-1);
+}, Qt::QueuedConnection);
+
+//    qDebug() << "Max Thread:" << QThreadPool().maxThreadCount();
+
+backEnd backend;
+engine.rootContext()->setContextProperty("backend", &backend);
+
+
+
+
+
+
+다음으로 할 일:
+    cam->retrieve >> cam->release >> crash error
 
     나중에 보기(정리용):
     How to define a "template" with child placeholders in QML?

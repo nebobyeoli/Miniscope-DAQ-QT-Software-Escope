@@ -15,6 +15,8 @@
 #include <QThread>
 #include <QtMath>
 
+#include <QProcess> // for QProcess::execute("CLS")
+
 VideoStreamOCV::VideoStreamOCV(QObject *parent, int width, int height, double pixelClock) :
     QObject(parent),
     m_deviceName(""),
@@ -23,12 +25,12 @@ VideoStreamOCV::VideoStreamOCV(QObject *parent, int width, int height, double pi
     m_headOrientationFilterState(false),
     m_isColor(true),
     m_trackExtTrigger(false),
-    m_expectedWidth(width),
-    m_expectedHeight(height),
+    m_expectedWidth(1280), // m_expectedWidth(width),
+    m_expectedHeight(720), // m_expectedHeight(height),
     m_pixelClock(pixelClock),
     m_connectionType("")
 {
-
+    qDebug() << "VideoStreamOCV constructor called: width" << width << "height" << height << "pixelClock" << pixelClock;
 }
 
 VideoStreamOCV::~VideoStreamOCV() {
@@ -41,6 +43,7 @@ int VideoStreamOCV::connect2Camera(int cameraID) {
     int connectionState = 0;
     m_cameraID = cameraID;
     cam = new cv::VideoCapture;
+    qDebug() << "connnect2Camera() running";
 
     auto apiPreference = cv::CAP_ANY;
     QString apiName = "OTHER";
@@ -57,12 +60,14 @@ int VideoStreamOCV::connect2Camera(int cameraID) {
         // we got our preferred backend!
         connectionState = 1;
         m_connectionType = apiName;
+        qDebug() << "cam open: connectionType" << apiName;
     }
     else {
         // connecting again using default backend
         if (cam->open(m_cameraID)) {
             connectionState = 2;
             m_connectionType = "OTHER";
+            qDebug() << "cam open: connectionType OTHER";
         }
     }
     // We need to make sure the MODE of the SERDES is correct
@@ -113,6 +118,7 @@ int VideoStreamOCV::connect2Camera(int cameraID) {
     if (connectionState != 0) {
          cam->set(cv::CAP_PROP_FRAME_WIDTH, m_expectedWidth);
          cam->set(cv::CAP_PROP_FRAME_HEIGHT, m_expectedHeight);
+        qDebug() << "connectionState != 0, cam->set:" << m_expectedWidth << "x" << m_expectedHeight;
          QThread::msleep(500);
     }
 //    qDebug() <<  "Camera capture backend is" << QString::fromStdString (cam->getBackendName());
@@ -130,6 +136,7 @@ int VideoStreamOCV::connect2Video(QString folderPath, QString filePrefix, float 
 
     QString firstVideoFile = m_playbackFolderPath + "/" + m_playbackFilePrefix + QString::number(m_playbackFileIndex) + ".avi";
     cam = new cv::VideoCapture;
+    qDebug() << "connnect2Video() running";
     if (cam->open(firstVideoFile.toStdString())) {
         QThread::msleep(500);
         m_connectionType = "videoFile";
@@ -218,7 +225,61 @@ void VideoStreamOCV::startStream()
                             qDebug() << "Reconnect to camera" << m_cameraID;
                         }
                     }
+                    else {
+                        // Retrieve successful
+                        // std::cout << frame; // 엄청 많은 숫자 // 프레임이라서
+                    }
                 }
+                // else {
+                //     // Grab successful
+                //     qDebug() << "Grab successful";
+                //     timeStampBuffer[idx%frameBufferSize] = QDateTime().currentMSecsSinceEpoch();
+                //
+                //     if (!cam->retrieve(frame)) {
+                //         // Retrieve failed
+                //         qDebug() << "Retrieve failed";
+                //         status = false;
+                //         // emit sendMessage("Warning: " + m_deviceName + " retrieve frame failed. Attempting to reconnect.");
+                //         qDebug() << "Warning: " + m_deviceName + " retrieve frame failed. Attempting to reconnect.";
+                //
+                //         if (cam->isOpened()) {
+                //             qDebug() << "Retrieve failed: Releasing cam" << m_cameraID;
+                //             cam->release();
+                //
+                //             // QThread::msleep(500);
+                //             // if (cam->isOpened()) {
+                //             //     qDebug() << "released !";
+                //             //     cam->release();
+                //             // }
+                //             // else {
+                //             //     qDebug() << "not released";
+                //             // }
+                //
+                //             // try {
+                //             //     cam->release();
+                //             // } catch (const std::exception& e) {
+                //             //     qDebug() << "exception!!!!!!!!!!!!!!!!!!";
+                //             //     qDebug() << e.what();
+                //             //     std::cerr << e.what();
+                //             // } catch (...) {
+                //             //     qDebug() << "other exception";
+                //             //     std::cerr << "other exception";
+                //             // }
+                //
+                //             qDebug() << "Released cam" << m_cameraID;
+                //         }
+                //         QThread::msleep(1000);
+                //
+                //         if (attemptReconnect()) {
+                //             // TODO: add some timeout here
+                //             emit sendMessage("Warning: " + m_deviceName + " reconnected.");
+                //             qDebug() << "Reconnect to camera" << m_cameraID;
+                //         }
+                //     }
+                //     else {
+                //         qDebug() << "Retrieve succeeded";
+                //     }
+                // }
             }
             else if (m_connectionType == "videoFile") {
                 QThread::msleep(1000.0/m_playbackFPS);
@@ -244,15 +305,23 @@ void VideoStreamOCV::startStream()
             }
             if (status) {
                 // frame was grabbed
-                // Grab and retieve successful
+                // Grab and retrieve successful
+                qDebug() << "frame was grabbed, Grab and retrieve successful, status:" << status;
+                qDebug() << "idx%frameBufferSize:" << idx%frameBufferSize; // 0 ~ 128
 
                 if (m_isColor) {
                     frame.copyTo(frameBuffer[idx%frameBufferSize]);
+                    
+                    // QProcess::execute("CLS");
+                    // std::cout << frame;
                 }
                 else {
                     //                            frame = cv::repeat(frame,4,4);
                     emit sendMessage("Warning: " + m_deviceName + " status frame grabbed, m_isColor=truenotfalse. (startStream)");
                     cv::cvtColor(frame, frameBuffer[idx%frameBufferSize], cv::COLOR_BayerGB2BGR);
+                    
+                    // QProcess::execute("CLS");
+                    // std::cout << frame;
                 }
                 // qDebug() << "Frame Number:" << *m_acqFrameNum - cam->get(cv::CAP_PROP_CONTRAST);
 
@@ -309,6 +378,7 @@ void VideoStreamOCV::startStream()
                 if(!freeFrames->tryAcquire()) {
                     // Failed to acquire free frame
                     // Will throw away this acquired frame
+                    qDebug() << "Failed to acquire free frame, Will throw away this acquired frame";
                     if (freeFrames->available() == 0) {
                         // Buffers are full!
                         emit sendMessage("Error: " + m_deviceName + " frame buffer is full. Frames will be lost!");
@@ -332,6 +402,7 @@ void VideoStreamOCV::startStream()
             if (!sendCommandQueue.isEmpty())
                 sendCommands(); // Send last of each control property events that arrived on this processEvent() call then removes it from queue
         }
+        qDebug() << "VideoStreamOCV::startStream(): Released cam";
         cam->release();
     }
     else {
@@ -457,6 +528,7 @@ bool VideoStreamOCV::attemptReconnect()
     // TODO: handle quitting nicely when stuck in this loop
     QVector<quint8> packet;
     if (m_connectionType == "DSHOW") {
+        qDebug() << "attemptReconnect(): DSHOW";
         if (cam->open(m_cameraID, cv::CAP_DSHOW)) {
 
             if (m_pixelClock <= 50) {
@@ -504,6 +576,7 @@ bool VideoStreamOCV::attemptReconnect()
         }
     }
     else if (m_connectionType == "OTHER") {
+        qDebug() << "attemptReconnect(): OTHER";
         if (cam->open(m_cameraID)) {
             if (m_pixelClock <= 50) {
                 // Set to 12bit low frequency in this case

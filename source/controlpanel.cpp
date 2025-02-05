@@ -97,11 +97,13 @@ void ControlPanel::fillUCEditText()
         if (m_userConfig[keys[i]].isString()) {
             props.append(keys[i]);
             values.append(m_userConfig[keys[i]].toString());
+            qDebug() << "ucProps append:" << keys[i] << "\t\tucValues append:" << m_userConfig[keys[i]].toString();
             isNumber.append(0);
         }
         if (m_userConfig[keys[i]].isDouble()) {
             props.append(keys[i]);
             values.append(m_userConfig[keys[i]].toDouble());
+            qDebug() << "ucProps append:" << keys[i] << "\t\tucValues append:" << m_userConfig[keys[i]].toDouble();
             isNumber.append(1);
         }
     }

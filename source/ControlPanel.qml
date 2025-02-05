@@ -1,17 +1,19 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick //2.0
+import QtQuick.Controls //2.12
+import QtQuick.Layouts //1.12
+import QtQuick.Controls.Basic // for TextArea.flickable: TextArea { background: Rectangle }
 
 Item {
     id: root
     objectName: "root"
-    width: parent.width
-    height: parent.height
+    // width: parent.width
+    // height: parent.height
 
     property double currentRecordTime: 0
     property double ucRecordLength: 1
     property bool recording: false
 
+    // property var ucProps: []
     property var ucProps: []
     property var ucValues: []
     property var ucIsNumber: []
@@ -189,8 +191,8 @@ Item {
                                 width: root.width - 10
                                 height: 60
                                 color: "transparent"
-                                anchors.left: parent.left
-                                anchors.leftMargin: 5
+                                AnchorChanges { anchors.left: parent.left }
+                                PropertyChanges { anchors.leftMargin: 5 }
                                 border.color: "#555555"
 
                                 Label {
@@ -206,10 +208,10 @@ Item {
                                 }
                                 TextField {
                                     property var validNumber : DoubleValidator { bottom:0;}
-                                    property var validAll : RegularExpressionValidator { regularExpression: /[0-9A-F]+/ }//RegExpValidator{}
+                                    property var validAll : RegularExpressionValidator { regularExpression: /[0-9A-F]+/ }
                                     width: parent.width - 10
                                     height:30
-                                    text: root.ucValues[index]
+                                    text: root.ucValues[index]  // Unable to assign [undefined] to QString error?
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.top: parent.top
                                     anchors.topMargin: 25
@@ -228,6 +230,7 @@ Item {
 
                                     onEditingFinished: {
                                         color = "green"
+                                        // console.log("index: "+index+", text: "+text);
                                         root.ucValues[index] = text;
                                         if (root.ucProps[index] === "recordLengthinSeconds") {
                                             root.ucRecordLength = text;
@@ -318,7 +321,7 @@ Item {
     }
     Connections{
         target: root
-        onCurrentRecordTimeChanged: {
+        function onCurrentRecordTimeChanged() {
             if ((root.currentRecordTime >= root.ucRecordLength) && root.ucRecordLength > 0) {
                 bStop.enabled = false;
                 bRecord.enabled = true;

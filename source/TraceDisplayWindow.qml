@@ -7,8 +7,8 @@ import QtQuick.Layouts 1.3
 Item {
     id: root
     objectName: "root"
-    width: parent.width
-    height: parent.height
+    // width: parent.width
+    // height: parent.height
 //    focus: true
 //    Keys.onPressed: {
 //        if (event.key == Qt.Key_Left) {

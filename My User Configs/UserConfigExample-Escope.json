@@ -1,0 +1,50 @@
+{
+  "dataDirectory": "C:/Escope/Miniscope_test_data",
+  "reserved terms for directoryStructure": [ "time", "date" ],
+  "directoryStructure": [
+    "researcherName",
+    "experimentName",
+    "animalName",
+    "date",
+    "time"
+  ],
+  "researcherName": "Alice_Cho_EScope_v1",
+  "experimentName": "EScope_v1_test",
+  "animalName": "Stuart",
+  "recordLengthinSeconds": 0,
+
+  "experiment_Not_Implemented": {
+    "type": "linearTrack",
+    "units": "cm",
+    "trackLength": 200
+  },
+  "behaviorTracker_Not_Implemented": {
+    "type": "HSV",
+    "hue": [ 0, 1 ],
+    "saturation": [ 0, 1 ],
+    "value": [ 0, 1 ]
+  },
+
+  
+  "devices": {
+    "miniscopes": [
+      {
+        "deviceName": "Miniscope",
+        "deviceType": "Siminiscope_1024X768",
+        "imageRegistration": "Off",
+        "streamHeadOrientation": false,
+        "deviceID": 0,
+        "showSaturation": true,
+        "compressionOptions": [ "MJPG", "MJ2C", "XVID", "FFV1" ],
+        "compression": "FFV1",
+        "framesPerFile": 1000,
+        "windowScale": 0.75,
+        "windowX": 800,
+        "windowY": 100,
+        "gain": "Low",
+        "led0": 10,
+        "frameRate": "10FPS"
+      }
+    ] 
+  }
+}

@@ -1,14 +1,45 @@
-
-How to change an old commit message?  // https://stackoverflow.com/a/77357720
-Instead of rebasing and force pushing the modified branch, it''s possible to replace a commit with a different message without affecting the existing commit hashes.
-The syntax looks like this:
-    git replace --edit <commit>  // works only locally
-    
+// "qt creator" how to automatically reload externally changed file ?
+// Take a look at look at Qt Creator's preference under:
+    Environment -> System -> When file are externally modified.
 
 
+// "파일이 다른 곳에서 열려 있음" 해결법
+    resmon (Resource Monitor) 실행 -> CPU 탭 들어가기 -> 프로세스 모두 체크 -> 연결된 핸들 - 핸들 검색 -> 프로세스 우클릭 - 프로세스 끝내기
+// https://superuser.com/a/643312
 
+
+// Powershell에서
+// 지난 1일 동안 수정된 파일들 모두 찾기:
+    Get-ChildItem -Path . -Recurse| Where-Object {$_.LastWriteTime -gt (Get-Date).AddDays(-1)}
+// 지난 1시간 동안 수정된 파일들 모두 찾기:
+    Get-ChildItem -Path . -Recurse| Where-Object {$_.LastWriteTime -gt (Get-Date).AddHours(-1)}
+// 지난 1분 동안 수정된 파일들 모두 찾기:
+    Get-ChildItem -Path . -Recurse| Where-Object {$_.LastWriteTime -gt (Get-Date).AddMinutes(-1)}
+
+
+
+
+// VSCode (Visual Studio Code)에서 Git 사용할 때, 콘솔창에서 텍스트 편집 대신 VSCode 편집기 사용하기
+// How to use Visual Studio Code as default editor for git?  // https://stackoverflow.com/questions/30024353/how-to-use-visual-studio-code-as-default-editor-for-git
+    git config --global core.editor "code --wait"
+// 이렇게 설정하면 VSCode에서 git을 사용할 때 실수도 줄어들고 편리함
+
+
+
+
+// How to change an old commit message?  // https://stackoverflow.com/a/77357720
+// Instead of rebasing and force pushing the modified branch, it's possible to replace a commit with a different message without affecting the existing commit hashes.
+// The syntax looks like this:
+    git replace --edit <commit>
+// edit: this actually doesn't work (works only locally)
+// github 서버에도 제대로 적용시키고 싶으면 git rebase 명령어 사용해야 함
+
+
+
+
+// these work
 << commit message 바꾸기 >>
-git rebase -i HEAD~N    // HEAD부터 N개 편집
+git rebase -i HEAD~N    // HEAD부터 N개 커밋 편집
 
 - 문구 바꾸고 싶은 commit에서 "pick" -> "reword"로 바꾸기, 저장 후 닫기
 - 창 다시 뜨면 commit 메시지 수정하기, 저장 후 닫기
@@ -17,16 +48,23 @@ git push --force-with-lease
 
 
 
-<< commit 내용 바꾸기 >>
+<< commit 내역 바꾸기 >>
 git rebase -i HEAD~N
 
   - 문구 바꾸고 싶은 commit에서 "pick" -> "edit"로 바꾸기, 저장 후 닫기
-2 - 그러면 폴더 내 파일들이 그 시점의 것으로 바뀔 것임. 그러면 파일들 수정하고 git add . 하거나 vscode로 stage all changes 하기
+2 - 그러면 폴더 내 파일들이 그 시점의 것들로 바뀐다. 그러면 파일들 수정하고 git add . 하거나 vscode로 stage all changes 하기
   - git rebase --continue
   - commit message 수정, 저장 후 닫기
   - 마지막 commit까지 모두 수정 완료될 때까지 2에서부터 다시 반복
 
 git push --force-with-lease
+
+
+
+
+<< git rebase 취소하기 >>
+git rebase --abort
+
 
 
 
@@ -39,18 +77,11 @@ private repo에 git push origin 할 때 "repository not found" 오류:
 
 시도할 것 2:
     // https://help.appveyor.com/discussions/problems/26502-git-push-origin-to-private-github-repo
-    제어판 > 사용자 계정 > 자격 증명 관리자 > Windows 자격 증명 > git:https://github.com  <---  제거하기
+    제어판 > 사용자 계정 > 자격 증명 관리자 > Windows 자격 증명 관리 > Windows 자격 증명 > git:https://[계정ID]@github.com  <---  제거하기
 
 
 
 
-How to use Visual Studio Code as default editor for git?  // https://stackoverflow.com/questions/30024353/how-to-use-visual-studio-code-as-default-editor-for-git
-    git config --global core.editor "code --wait"
-
-
-Resource Monitor: resmon 으로 검색
-"파일이 다른 곳에서 열려 있음" 해결법
-https://superuser.com/a/643312
 
 
 
@@ -74,7 +105,6 @@ read "backend.m_jsonTreeModel" as "backend.jsonTreeModel" :
     void updateTreeViewModel(const QJsonObject &jConfig);
     void addJsonObjectToTree(QStandardItem *parent, const QJsonObject &jsonObject);
     void updateJsonModel(int row, int column, const QString &newValue);
-
 
 
 
@@ -272,19 +302,20 @@ alignments:
 
 
 다음으로 할 일:
-    qml -> UI
+    opencv camera connection error
+    image to color
+        DAQ = grayscale
+        ISP -> 'to color in the SW without matlab'
+    dual led 설정작업(?)
+    
+
     main.qml에서 하나씩 주석추가/해제하는건 어디서 밀림 발생하는거??
     multiple columns in treeview "bug" qml....
-
 
     나중에 보기(정리용):
     How to define a "template" with child placeholders in QML?
     https://stackoverflow.com/questions/12477425/how-to-define-a-template-with-child-placeholders-in-qml
 
-
-
-    DAQ-grayscale
-    ISP-'to color'
 
 
 

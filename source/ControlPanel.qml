@@ -22,16 +22,17 @@ Item {
 
     Rectangle {
         id: rectangle
+        Layout.fillWidth: false; width: Window.width
+        Layout.fillHeight: false; height: Window.height
         color: "#cacaca"
-        anchors.fill: parent
     }
 
     // GridLayout { // Log상자 안 뜸. 어찌어찌 뜨게 해도 개별 "Row" 형태로 정렬 안 됨. 강제로 columns: 1 설정하려 하면 crash됨
     //     id: gridLayout
     //     anchors.fill: parent
     ColumnLayout {
-        Layout.fillHeight: true
         Layout.fillWidth: true
+        Layout.fillHeight: true
 
         RowLayout {
             TextField {
@@ -40,7 +41,9 @@ Item {
                 text: qsTr("Enter Note")
                 font.pointSize: 10
                 font.family: "Arial"
-                // Layout.fillWidth: true
+
+                Layout.fillWidth: true
+                width: (Window.width - 10) / 3 * 2
                 onFocusChanged: {
                     if (focus)
                         selectAll()
@@ -52,7 +55,9 @@ Item {
                 text: qsTr("Submit Note")
                 enabled: false
                 checkable: false
-                // Layout.fillWidth: true
+
+                Layout.fillWidth: true
+                width: (Window.width - 10) / 3
                 onClicked: {
                     root.submitNoteSignal(textNote.text);
                     textNote.text = "Enter Note";
@@ -95,14 +100,22 @@ Item {
             width: parent.width
             TabButton {
                 text: qsTr("Home")
-                width: implicitWidth
+                width: 80 // width: implicitWidth
+                height: 40
+                background: Rectangle {
+                    color: bar.currentIndex === 0 ? "white" : "black"
+                }
                 // onClicked: {
                 //     stack.currentIndex = 0;
                 // }
             }
             TabButton {
                 text: qsTr("User Config")
-                width: implicitWidth
+                width: 100 // width: implicitWidth
+                height: 40
+                background: Rectangle {
+                    color: bar.currentIndex === 1 ? "white" : "black"
+                }
                 // onClicked: {
                 //     stack.currentIndex = 1;
                 // }
@@ -327,27 +340,29 @@ Item {
             }
         }
 
-        ProgressBar {
-            id: progressBar
-            height: 40
-            Layout.minimumHeight: 40
-            // Layout.preferredHeight: 40
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillWidth: true
-            value: (root.ucRecordLength > 0) ? root.currentRecordTime/root.ucRecordLength : root.currentRecordTime%2
-            from: 0
-            to:1
-            Layout.columnSpan: 1
-        }
+        RowLayout {
+            ProgressBar {
+                id: progressBar
+                height: 40
+                Layout.minimumHeight: 40
+                // Layout.preferredHeight: 40
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
+                value: (root.ucRecordLength > 0) ? root.currentRecordTime/root.ucRecordLength : root.currentRecordTime%2
+                from: 0
+                to: 1
+                Layout.columnSpan: 1
+            }
 
-        Text {
-            id: recordTimeText
-            objectName: "recordTimeText"
+            Text {
+                id: recordTimeText
+                objectName: "recordTimeText"
 
-            text: (root.ucRecordLength > 0) ? root.currentRecordTime.toString() + "/" + root.ucRecordLength.toString() + "s" : root.currentRecordTime.toString() + "s"
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            font.pointSize: 12
-            font.family: "Arial"
+                text: (root.ucRecordLength > 0) ? root.currentRecordTime.toString() + "/" + root.ucRecordLength.toString() + "s" : root.currentRecordTime.toString() + "s"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.pointSize: 12
+                font.family: "Arial"
+            }
         }
     }
     Connections{

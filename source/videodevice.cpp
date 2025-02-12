@@ -161,12 +161,14 @@ void VideoDevice::createView()
         // Setup device window
 //        const QUrl url(m_cBehavCam["qmlFile"].toString("qrc:/behaviorCam.qml"));
         const QUrl url(m_cDevice["qmlFile"].toString());
+        qDebug() << "Set videodevice window url:" << m_cDevice["qmlFile"].toString();
         view = new NewQuickView(url);
 
         view->setWidth(m_cDevice["width"].toInt() * m_ucDevice["windowScale"].toDouble(1));
         view->setHeight(m_cDevice["height"].toInt() * m_ucDevice["windowScale"].toDouble(1));
 
         view->setTitle(m_deviceName);
+        qDebug() << "Set videodevice window title:" << m_deviceName;
         view->setX(m_ucDevice["windowX"].toInt(1));
         view->setY(m_ucDevice["windowY"].toInt(1));
 
@@ -174,6 +176,7 @@ void VideoDevice::createView()
         view->setFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint);
 #endif
         view->show();
+        qDebug() << "Created videodevice window:" << m_deviceName;
         // --------------------
 
         rootObject = view->rootObject();

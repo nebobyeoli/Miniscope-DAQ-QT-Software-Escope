@@ -1,3 +1,19 @@
+검색:
+qobject setproperty not working qml
+
+newquickview rootobject not updating in qml
+    // https://doc.qt.io/qt-6/qtqml-cppintegration-interactqmlfromcpp.html
+    // Warning: Although it is possible to access QML objects from C++ and manipulate them, it is not the recommended approach, except for testing and prototyping purposes.
+    // One of the strengths of QML and C++ integration is the ability to implement UIs in QML separate from the C++ logic and dataset backend,
+    // and this fails if the C++ side starts manipulating QML directly. Such an approach also makes changing the QML UI difficult without affecting its C++ counterpart.
+
+
+
+
+
+
+
+
 // "qt creator" how to automatically reload externally changed file ?
 // Take a look at look at Qt Creator's preference under:
     Environment -> System -> When file are externally modified.
@@ -80,6 +96,51 @@ private repo에 git push origin 할 때 "repository not found" 오류:
     제어판 > 사용자 계정 > 자격 증명 관리자 > Windows 자격 증명 관리 > Windows 자격 증명 > git:https://[계정ID]@github.com  <---  제거하기
 
 
+
+
+
+qml에서:
+    "str"
+    qsTr("str")
+    상관없음
+    // Advantage of QString over std::string - c++  // https://stackoverflow.com/a/11028965
+    // 2012-06-14: QString allows you to work with Unicode, has more useful methods
+    // and integrates with Qt well. It also has better performance.
+
+
+TabBar QML Type
+    // TabBar provides a tab-based navigation model.
+StackLayout QML Type
+    // The StackLayout class provides a stack of items where only one item is visible at a time.
+
+
+Layout.columnSpan : int
+    // This property allows you to specify the column span of an item in a GridLayout.
+    // The default value is 1.
+Layout.rowSpan : int
+    // This property allows you to specify the row span of an item in a GridLayout.
+    // The default value is 1.
+
+
+
+/* flickable textarea test */
+// TextArea {
+TextArea.flickable: TextArea {
+    id: iiiDddd
+    text: "flickable textarea test"
+    readOnly: true
+    wrapMode: Text.WrapAnywhere // wrapMode: TextArea.WordWrap
+    textFormat: Text.RichText
+    font.pointSize: 12
+
+    Layout.fillWidth: true
+
+    background: Rectangle {
+        color: "#f9f9f9"
+        border.color: "#cccccc"
+        border.width: 1
+    }
+}
 
 
 

@@ -16,6 +16,7 @@
 #include <QProcess>
 #include <QJsonArray>
 #include <QMap>
+#include <QQmlProperty> // for QQmlProperty::read
 
 ControlPanel::ControlPanel(QObject *parent, QJsonObject userConfig) :
     QObject(parent),
@@ -50,7 +51,8 @@ void ControlPanel::createView()
 #ifdef Q_OS_WINDOWS
         view->setFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint);
 #endif
-    view->show();
+    view->show(); // 처음 실행하든 마지막에 실행하든 Unable to assign [undefined] to QString 오류 여부에 상관없음
+    qDebug() << "Created Control Panel window";
 
     rootObject = view->rootObject();
     messageTextArea = rootObject->findChild<QQuickItem*>("messageTextArea");
@@ -63,7 +65,9 @@ void ControlPanel::createView()
 //    recordTimeText->setProperty("text", "----/" + QString::number(m_ucRecordLengthinSeconds) + " s");
 
     fillUCEditText();
+    qDebug() << "ControlPanel::fillUCEditText() completed";
     connectSnS();
+    qDebug() << "ControlPanel::connectSnS() completed";
 }
 
 void ControlPanel::connectSnS()
@@ -108,8 +112,12 @@ void ControlPanel::fillUCEditText()
         }
     }
     rootObject->setProperty("ucProps", props);
+    qDebug() << "ucProps setProperty:" << QQmlProperty::read(rootObject, "ucProps").toJsonArray();
     rootObject->setProperty("ucValues", values);
+    qDebug() << "ucValues setProperty:" << QQmlProperty::read(rootObject, "ucValues").toJsonArray();
     rootObject->setProperty("ucIsNumber", isNumber);
+    qDebug() << "ucIsNumber setProperty:" << QQmlProperty::read(rootObject, "ucIsNumber").toJsonArray();
+    qDebug() << "\n";
 }
 
 void ControlPanel::receiveMessage(QString msg)

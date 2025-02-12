@@ -25,8 +25,8 @@ VideoStreamOCV::VideoStreamOCV(QObject *parent, int width, int height, double pi
     m_headOrientationFilterState(false),
     m_isColor(true),
     m_trackExtTrigger(false),
-    m_expectedWidth(1280), // m_expectedWidth(width),
-    m_expectedHeight(720), // m_expectedHeight(height),
+    m_expectedWidth(width), // m_expectedWidth(width),
+    m_expectedHeight(height), // m_expectedHeight(height),
     m_pixelClock(pixelClock),
     m_connectionType("")
 {
@@ -300,15 +300,16 @@ void VideoStreamOCV::startStream()
                     }
                     else
                         return;
-
+                    
                 }
             }
             if (status) {
                 // frame was grabbed
                 // Grab and retrieve successful
-                qDebug() << "frame was grabbed, Grab and retrieve successful, status:" << status;
+                qDebug() << "\nframe was grabbed, Grab and retrieve successful, status:" << status;
                 qDebug() << "idx%frameBufferSize:" << idx%frameBufferSize; // 0 ~ 128
 
+                qDebug() << "m_isColor:" << m_isColor;
                 if (m_isColor) {
                     frame.copyTo(frameBuffer[idx%frameBufferSize]);
                     
@@ -325,6 +326,7 @@ void VideoStreamOCV::startStream()
                 }
                 // qDebug() << "Frame Number:" << *m_acqFrameNum - cam->get(cv::CAP_PROP_CONTRAST);
 
+                qDebug() << "m_trackExtTrigger:" << m_trackExtTrigger;
                 if (m_trackExtTrigger) {
                     if (extTriggerLast == -1) {
                         // first time grabbing trigger state.
@@ -347,6 +349,7 @@ void VideoStreamOCV::startStream()
                     }
                 }
 
+                qDebug() << "m_headOrientationStreamState:" << m_headOrientationStreamState;
                 if (m_headOrientationStreamState) {
                     // BNO output is a unit quaternion after 2^14 division
                     w = static_cast<qint16>(cam->get(cv::CAP_PROP_SATURATION));
@@ -367,6 +370,7 @@ void VideoStreamOCV::startStream()
                     bnoBuffer[(idx%frameBufferSize)*5 + 4] = abs((norm/16384.0) - 1);
                     //                            qDebug() << QString::number(static_cast<qint16>(cam->get(cv::CAP_PROP_SHARPNESS)),2) << norm << w << x << y << z ;
                 }
+                qDebug() << "daqFrameNum:" << daqFrameNum;
                 if (daqFrameNum != nullptr) {
                     *daqFrameNum = cam->get(cv::CAP_PROP_CONTRAST) - daqFrameNumOffset;
                     // qDebug() << cam->get(cv::CAP_PROP_CONTRAST);// *daqFrameNum;

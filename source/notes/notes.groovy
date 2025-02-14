@@ -222,6 +222,19 @@ void backEnd::loadUserConfigFile() 초기 부분에서
 
 
 
+
+how to print qjsonobject?
+// https://stackoverflow.com/a/28191005
+    QJsonDocument doc(jObj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+    qDebug() << strJson;
+    qDebug() << doc.toJson();
+
+
+
+
+
+
 "QVariants"
     QVariant(QString, "Integer") "Integer"
     QVariant(QString, "String") "String"
@@ -229,6 +242,8 @@ void backEnd::loadUserConfigFile() 초기 부분에서
 
 
 
+
+emit sendMessage() vs qDebug() Qt?
 
 QDebug dbg(QtDebugMsg);
 dbg << "a";

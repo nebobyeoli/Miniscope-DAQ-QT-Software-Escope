@@ -148,6 +148,8 @@ VideoDevice::VideoDevice(QObject *parent, QJsonObject ucDevice, qint64 softwareS
 
 void VideoDevice::createView()
 {
+    qDebug() << "m_camConnected:" << m_camConnected; // 1: connected using Direct Show.
+
     if (m_camConnected != 0) {
         if (m_camConnected == 1)
             emit sendMessage(m_deviceName + " connected using Direct Show.");
@@ -341,22 +343,50 @@ QJsonObject VideoDevice::getDeviceConfig(QString deviceType) {
     QString jsonFile;
     QFile file;
     QJsonObject jObj;
-    bool status = false;
     m_deviceType = deviceType;
-    file.setFileName("deviceConfigs/videoDevices.json");
-    status = file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    // backEnd::backEnd() 참고:  절대 경로로 파일 설정 -> 경로 문제 해결
+    QString filePath = QCoreApplication::applicationDirPath() + "/deviceConfigs/videoDevices.json";
+    file.setFileName(filePath); // file.setFileName("deviceConfigs/videoDevices.json");
+    
+    bool status = file.open(QIODevice::ReadOnly | QIODevice::Text);
     if (status == true) {
         jsonFile = file.readAll();
         file.close();
-        QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8());
+
+        // jsonFile = jsonFile.remove("\t");
+        // jsonFile = /*test*/"{  \"Siminiscope_1024X768\": {  \"qmlFile\": \"qrc:/Miniscope_Ewha.qml\",  \"sensor\": \"MT9P031\",  \"frameRate\": \"adjustable\",  \"width\": 1024,  \"height\": 768  }  }";
+        // qDebug() << jsonFile;
+
+        QJsonParseError parseErr;
+        QJsonDocument d = QJsonDocument::fromJson(jsonFile.toUtf8(), &parseErr);
+        qDebug() << "QJsonParseError check:" << parseErr.errorString();
         jObj = d.object();
+
+        // QJsonDocument doc(jObj);
+        // qDebug() << QString(doc.toJson());
+
+        qDebug() << "createView videodevice window url( m_cDevice[\"qmlFile\"].toString() ):" << jObj[deviceType].toObject()["qmlFile"].toString();
+
         return jObj[deviceType].toObject();
     }
     else {
+        qDebug() << "ERROR VideoDevice::getDeviceConfig(): VIDEODEVICES_JSON_LOAD_FAIL";
         m_errors |= VIDEODEVICES_JSON_LOAD_FAIL;
         return jObj; // empty json object
+        
+        // return jObj["WebCam-1280x720"].toObject();
+        // QJsonObject object {
+        //     {"qmlFile", "qrc:/behaviorCam.qml"},
+        //     {"sensor", ""},
+        //     {"frameRate", 30},
+        //     {"width", 1280},
+        //     {"height", 720},
+        //     {"isColor", true},
+        //     {"controlSettings", {} }
+        // };
+        // return object;
     }
-
 }
 
 void VideoDevice::configureDeviceControls() {

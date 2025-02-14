@@ -97,11 +97,12 @@ backEnd::backEnd(QObject *parent) :
 
     qDebug() <<"supportedDevices: "<< supportedDevices;
 
-    // 절대 경로로 파일 설정-> 경로 문제 수정
-//    QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/deviceConfigs/videoDevices.json";
+    // 절대 경로로 파일 설정 -> 경로 문제 해결
+    // QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/deviceConfigs/videoDevices.json";
+    // file.setFileName("./deviceConfigs/videoDevices.json");
     QString filePath = QCoreApplication::applicationDirPath() + "/deviceConfigs/videoDevices.json";
     file.setFileName(filePath);
-    //file.setFileName("./deviceConfigs/videoDevices.json");
+
     qDebug() << "Selected path:" << filePath;
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/AppName";
     qDebug() << "Config Path:" << configPath;
@@ -1235,6 +1236,8 @@ void backEnd::constructUserConfigGUI()
         if (miniscope.last()->getErrors() != 0) {
             // Errors have occured in creating this object
             emit sendMessage("ERROR: " + miniscope.last()->getDeviceName() + " has error: " + QString::number(miniscope.last()->getErrors()));
+            // emit sendMessage(miniscope.last()->getErrors());
+            emit sendMessage("ucMiniscopes[keys[idx]]: " + ucMiniscopes[keys[idx]].toObject()["deviceType"].toString());
         }
         else {
             miniscope.last()->setTraceDisplayStatus(traceDisplay != nullptr);
@@ -1258,6 +1261,8 @@ void backEnd::constructUserConfigGUI()
         if (behavCam.last()->getErrors() != 0) {
             // Errors have occured in creating this object
             emit sendMessage("ERROR: " + behavCam.last()->getDeviceName() + " has error: " + QString::number(behavCam.last()->getErrors()));
+            // emit sendMessage(behavCam.last()->getErrors());
+            emit sendMessage("ucBehaviorCams[keys[idx]]: " + ucBehaviorCams[keys[idx]].toObject()["deviceType"].toString());
         }
         else
             behavCam.last()->createView();

@@ -17,7 +17,7 @@ VideoDisplay::VideoDisplay()
       lastMouseClickEvent(nullptr),
       lastMouseReleaseEvent(nullptr)
 {
-//    m_displayFrame2.load("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png");
+    // m_displayFrame2.load("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png");
     setAcceptedMouseButtons(Qt::AllButtons);
     connect(this, &QQuickItem::windowChanged, this, &VideoDisplay::handleWindowChanged);
 
@@ -35,15 +35,16 @@ void VideoDisplay::setT(qreal t)
         window()->update();
 }
 void VideoDisplay::setDisplayFrame(QImage frame) {
-//    m_displayFrame2 = frame;
+    // m_displayFrame2 = frame;
+
     // Checking to see if there is already a new frame waiting has solved a
     // consistent source of crash.
     // This crash was due to the texture data of the next frame in the queue to be displayed
     // changing before it is moved to GPU memory I think.
     if (m_renderer && !m_renderer->m_newFrame)
         m_renderer->setDisplayFrame(frame);
-//    else
-//        qDebug() << "New frame available before last frame was displayed";
+    // else
+    //     qDebug() << "New frame available before last frame was displayed";
 }
 
 void VideoDisplay::setShowSaturation(double value)
@@ -68,7 +69,7 @@ void VideoDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-       // win->setClearBeforeRendering(false);
+        // win->setClearBeforeRendering(false);
     }
 }
 //! [3]
@@ -95,12 +96,12 @@ void VideoDisplay::sync()
     if (!m_renderer) {
         m_renderer = new VideoDisplayRenderer();
         m_renderer->setShowSaturation(m_showSaturation);
-//        m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
+        // m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
         connect(window(), &QQuickWindow::beforeRendering, m_renderer, &VideoDisplayRenderer::paint, Qt::DirectConnection);
     }
     m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-//    m_renderer->setT(m_t);
-//    m_renderer->setDisplayFrame(m_displayFrame);
+    // m_renderer->setT(m_t);
+    // m_renderer->setDisplayFrame(m_displayFrame);
     m_renderer->setWindow(window());
 }
 //! [9]
@@ -110,7 +111,7 @@ void VideoDisplay::mousePressEvent(QMouseEvent *event){
         // TODO: Send info to shader to draw rectangle
         //lastMouseClickEvent = new QMouseEvent(*event);
     }
-//        qDebug() << "Mouse Press" << event;
+    // qDebug() << "Mouse Press" << event;
 }
 
 void VideoDisplay::mouseMoveEvent(QMouseEvent *event) {
@@ -131,7 +132,7 @@ void VideoDisplay::mouseMoveEvent(QMouseEvent *event) {
         int height = abs(lastMouseClickEvent->position().y() - event->position().y());
 
         setAddTraceROI({leftEdge,topEdge,width,height,m_addTraceRoiSelectionActive});
-//        qDebug() << "Mouse Move" << event;
+        // qDebug() << "Mouse Move" << event;
     }
 }
 
@@ -187,7 +188,7 @@ void VideoDisplay::setAddTraceROI(QList<int> roi)
 
 void VideoDisplayRenderer::paint()
 {
-    //    qDebug() << "Painting!";
+    // qDebug() << "Painting!";
     if (!m_program) {
         initializeOpenGLFunctions();
 
@@ -225,15 +226,14 @@ void VideoDisplayRenderer::paint()
 
     };
     float texcoord[] = {
-//        1, 1,
-//        1, 0,
-//        0, 1,
-//        0, 0
+        // 1, 1,
+        // 1, 0,
+        // 0, 1,
+        // 0, 0
         0, 1,
         1, 1,
         0, 0,
         1, 0
-
     };
     m_program->setAttributeArray(0, GL_FLOAT, position, 2);
     m_program->setAttributeArray(1, GL_FLOAT, texcoord, 2);
@@ -262,7 +262,7 @@ void VideoDisplayRenderer::paint()
     //m_window->resetOpenGLState();
 
     if (m_newFrame) {
-//        qDebug() << "Set new texture QImage";
+        // qDebug() << "Set new texture QImage";
 
         m_texture->destroy();
         m_texture->create();

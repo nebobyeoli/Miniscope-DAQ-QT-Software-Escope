@@ -84,7 +84,9 @@ Item {
             return root.displaySpinBoxValues[value];
         }
 
-        onValueChanged: root.valueChangedSignal(root.displayTextValues[value], root.outputValues[value],root.outputValues2[value])
+        function onValueChanged() {
+            root.valueChangedSignal(root.displayTextValues[value], root.outputValues[value],root.outputValues2[value])
+        }
     }
 
     Text {

@@ -2,6 +2,7 @@ import QtQuick 2.12
 import VideoDisplay 1.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Basic // for use of [property: "background" item: QQuickRectangle]
 
 
 Item {
@@ -413,40 +414,72 @@ Item {
 
     Connections{
         target: led0
-        onValueChangedSignal: vidPropChangedSignal(led0.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(led0.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: led1
-        onValueChangedSignal: vidPropChangedSignal(led1.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(led1.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: ewl
-        onValueChangedSignal: vidPropChangedSignal(ewl.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(ewl.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: gain
-        onValueChangedSignal: vidPropChangedSignal(gain.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(gain.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: frameRate
-        onValueChangedSignal: vidPropChangedSignal(frameRate.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(frameRate.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: alpha
-        onValueChangedSignal: vidPropChangedSignal(alpha.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(alpha.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: beta
-        onValueChangedSignal: vidPropChangedSignal(beta.objectName, displayValue, i2cValue, i2cValue2)
+        function onValueChangedSignal(type, displayValue, i2cValue, i2cValue2) {
+            vidPropChangedSignal(beta.objectName, displayValue, i2cValue, i2cValue2)
+        }
     }
     Connections{
         target: dFFSwitch
-        onClicked: dFFSwitchChanged(dFFSwitch.checked)
+        function onClicked() {
+            dFFSwitchChanged(dFFSwitch.checked)
+        }
     }
     Connections{
         target: saturationSwitch
-        onClicked: saturationSwitchChanged(saturationSwitch.checked)
+        function onClicked() {
+            saturationSwitchChanged(saturationSwitch.checked)
+        }
     }
+
+    // connection attempt (in this qml file, originally in the cpp file) of signals defined (in this qml file)
+    // Connections{
+    //     target: root
+    //     function dFFSwitchChanged(value) {
+    //         handleDFFSwitchChange(value)
+    //     }
+    // }
+    // Connections{
+    //     target: root
+    //     function addTraceRoiClicked() {
+    //         handleAddTraceRoiClicked()
+    //     }
+    // }
 
     states: [
         State{

@@ -192,6 +192,9 @@ void VideoDevice::createView()
         QObject::connect(rootObject, SIGNAL( dFFSwitchChanged(bool) ),
                              this, SLOT( handleDFFSwitchChange(bool) ));
 
+        // qDebug() << rootObject->children();
+
+        
         QObject::connect(rootObject, SIGNAL( saturationSwitchChanged(bool) ),
                              this, SLOT( handleSaturationSwitchChanged(bool) ));
 
@@ -372,6 +375,7 @@ QJsonObject VideoDevice::getDeviceConfig(QString deviceType) {
     }
     else {
         qDebug() << "ERROR VideoDevice::getDeviceConfig(): VIDEODEVICES_JSON_LOAD_FAIL";
+        qDebug() << "ERROR filePath:" << filePath;
         m_errors |= VIDEODEVICES_JSON_LOAD_FAIL;
         return jObj; // empty json object
         
@@ -748,6 +752,8 @@ void VideoDevice::handleAddTraceRoiClicked()
 
 void VideoDevice::handleNewROI(int leftEdge, int topEdge, int width, int height)
 {
+    qDebug() << "VideoDevice::handleNewROI() called";
+
     m_roiIsDefined = true;
     // First scale the local position values to pixel values
     m_roiBoundingBox[0] = round(leftEdge/m_ucDevice["windowScale"].toDouble(1));
@@ -758,12 +764,12 @@ void VideoDevice::handleNewROI(int leftEdge, int topEdge, int width, int height)
     if ((m_roiBoundingBox[0] + m_roiBoundingBox[2]) > m_cDevice["width"].toInt(-1)) {
         // Edge is off screen
         m_roiBoundingBox[2] = m_cDevice["width"].toInt(-1) - m_roiBoundingBox[0];
-        emit sendMessage("Warning: Right edge of ROI drawn beyond right edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
+        emit sendMessage("Warning: Right edge of ROI drawn beyond right edge of video. If this is incorrect you can change the width and height values in deviceConfigs/behaviorCams.json");
     }
     if ((m_roiBoundingBox[1] + m_roiBoundingBox[3]) > m_cDevice["height"].toInt(-1)) {
         // Edge is off screen
         m_roiBoundingBox[3] = m_cDevice["height"].toInt(-1) - m_roiBoundingBox[1];
-        emit sendMessage("Warning: Bottm edge of ROI drawn beyond bottom edge of video. If this is incorrect you can change the width and height values in deviceCnfigs/behaviorCams.json");
+        emit sendMessage("Warning: Bottom edge of ROI drawn beyond bottom edge of video. If this is incorrect you can change the width and height values in deviceConfigs/behaviorCams.json");
 
     }
 

@@ -99,6 +99,19 @@ private repo에 git push origin 할 때 "repository not found" 오류:
 
 
 
+
+
+
+
+When to use explicit constructors in c++ cpp?
+// https://stackoverflow.com/a/12437453
+
+
+
+
+
+
+
 qml에서:
     "str"
     qsTr("str")

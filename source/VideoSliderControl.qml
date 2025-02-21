@@ -70,11 +70,9 @@ Item {
         to: root.max
         value: root.startValue
 
-        onValueChanged: root.valueChangedSignal(value, (value * root.displayValueScale  - root.displayValueOffset)<<root.displayValueBitShift, 0)
-
-//        function valueChanged(){
-//            root.valueChangedSignal(value, value * root.displayValueScale  - root.displayValueOffset);
-//        }
+        function onValueChanged() {
+            root.valueChangedSignal(value, (value * root.displayValueScale  - root.displayValueOffset)<<root.displayValueBitShift, 0)
+        }
     }
 
     Text {

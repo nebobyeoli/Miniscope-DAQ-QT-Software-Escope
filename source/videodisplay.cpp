@@ -68,7 +68,7 @@ void VideoDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-        win->setClearBeforeRendering(false);
+        // win->setClearBeforeRendering(false);
     }
 }
 //! [3]
@@ -96,7 +96,7 @@ void VideoDisplay::sync()
         m_renderer = new VideoDisplayRenderer();
         m_renderer->setShowSaturation(m_showSaturation);
 //        m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
-        connect(window(), &QQuickWindow::beforeRendering, m_renderer, &VideoDisplayRenderer::paint, Qt::DirectConnection);
+        connect(window(), &QQuickWindow::afterRendering, m_renderer, &VideoDisplayRenderer::paint, Qt::DirectConnection);
     }
     m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
 //    m_renderer->setT(m_t);
@@ -259,7 +259,7 @@ void VideoDisplayRenderer::paint()
 
     // Not strictly needed for this example, but generally useful for when
     // mixing with raw OpenGL.
-    m_window->resetOpenGLState();
+    // m_window->resetOpenGLState();
 
     if (m_newFrame) {
 //        qDebug() << "Set new texture QImage";

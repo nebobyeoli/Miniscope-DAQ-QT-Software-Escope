@@ -223,7 +223,7 @@ void BehaviorTracker::createView(QSize resolution)
 
     rootObject = view->rootObject();
     trackerDisplay = rootObject->findChild<TrackerDisplay*>("trackerDisplay");
-    QObject::connect(trackerDisplay->window(), &QQuickWindow::beforeRendering, this, &BehaviorTracker::sendNewFrame);
+    QObject::connect(trackerDisplay->window(), &QQuickWindow::afterRendering, this, &BehaviorTracker::sendNewFrame);
     trackerDisplay->setPValueCutOff(m_pCutoffDisplay);
     trackerDisplay->setOverlayShowState(m_poseOverlayEnabled);
     trackerDisplay->setPoseMarkerSize(m_poseMarkerSize);
@@ -840,7 +840,7 @@ void TrackerDisplayRenderer::paint()
 
     // Not strictly needed for this example, but generally useful for when
     // mixing with raw OpenGL.
-    m_window->resetOpenGLState();
+    // m_window->resetOpenGLState();
 }
 
 TrackerDisplay::TrackerDisplay():
@@ -930,7 +930,7 @@ void TrackerDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-        win->setClearBeforeRendering(false);
+        // win->setClearBeforeRendering(false);
     }
 }
 
@@ -940,7 +940,7 @@ void TrackerDisplay::sync()
         m_renderer = new TrackerDisplayRenderer(nullptr, window()->size() * window()->devicePixelRatio());
 //        m_renderer->setShowSaturation(m_showSaturation);
 //        m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
-        connect(window(), &QQuickWindow::beforeRendering, m_renderer, &TrackerDisplayRenderer::paint, Qt::DirectConnection);
+        connect(window(), &QQuickWindow::afterRendering, m_renderer, &TrackerDisplayRenderer::paint, Qt::DirectConnection);
         m_renderer->m_showOcc = m_showOcc;
         m_renderer->pValCut = m_pValCut;
         m_renderer->overlayEnabled = m_overlayEnabled;

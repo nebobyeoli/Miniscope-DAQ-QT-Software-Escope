@@ -295,7 +295,7 @@ void VideoStreamOCV::startStream()
                     if (cam->open(fileName.toStdString())) {
                         if (!cam->read(frame)) {
                             status = false;
-                            //return;
+                            return;
                         }
                     }
                     else
@@ -397,9 +397,6 @@ void VideoStreamOCV::startStream()
                     usedFrames->release();
                 }
 
-            }
-            else {
-                return;
             }
             // Get any new events
             QCoreApplication::processEvents(); // Is there a better way to do this. This is against best practices

@@ -11,6 +11,7 @@
 #include <QJsonObject>
 #include <QtQuick/QQuickView>
 #include <QMap>
+#include <QVector>
 #include <QtQuick/QQuickItem>
 #include <QVariant>
 #include <QString>

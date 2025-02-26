@@ -60,8 +60,8 @@ void BehaviorCam::setupDisplayObjectPointers()
 
 void BehaviorCam::handleNewDisplayFrame(qint64 timeStamp, cv::Mat frame, int bufIdx, VideoDisplay *vidDisp)
 {
-    Q_UNUSED(timeStamp);
-    Q_UNUSED(bufIdx);
+    // Q_UNUSED(timeStamp);
+    // Q_UNUSED(bufIdx);
 
     QImage tempFrame2;
     cv::Mat tempFrame, tempMat1, tempMat2;

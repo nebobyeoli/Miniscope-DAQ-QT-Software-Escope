@@ -100,31 +100,31 @@ void TraceDisplay::mousePressEvent(QMouseEvent *event)
 void TraceDisplay::mouseMoveEvent(QMouseEvent *event)
 {
  //Drag event;
-   float deltaX, deltaY;
-    if (event->buttons() == Qt::LeftButton) {
-       if (!lastMousePos.isNull()) {
-           deltaX = lastMousePos.x() - event->position().x();
-           deltaY = lastMousePos.y() - event->position().y();
-       }
-       else {
-           deltaX = lastMouseClickPos.x() - event->position().x();
-           deltaY = lastMouseClickPos.y() - event->position().y();
-       }
-       lastMousePos = event->position();
-       m_renderer->updatePan(deltaX, deltaY);
-   }
-    /*if (lastMouseMoveEvent) {
-            deltaX = lastMouseMoveEvent-> position().x() - event->position().x();
-            deltaY = lastMouseMoveEvent->position().y() - event->position().y();
-        }
-        else {
-            deltaX = lastMouseClickEvent-> position().x() - event-> position().x();
-            deltaY = lastMouseClickEvent->position().y() - event->position().y();
-        }
-        lastMouseMoveEvent = new QMouseEvent(*event);
-        m_renderer->updatePan(deltaX, deltaY);
-    }
-    qDebug() << "Mouse Move" << event;*/
+//    float deltaX, deltaY;
+//     if (event->buttons() == Qt::LeftButton) {
+//        if (!lastMousePos.isNull()) {
+//            deltaX = lastMousePos.x() - event->position().x();
+//            deltaY = lastMousePos.y() - event->position().y();
+//        }
+//        else {
+//            deltaX = lastMouseClickPos.x() - event->position().x();
+//            deltaY = lastMouseClickPos.y() - event->position().y();
+//        }
+//        lastMousePos = event->position();
+//        m_renderer->updatePan(deltaX, deltaY);
+//    }
+//     /*if (lastMouseMoveEvent) {
+//             deltaX = lastMouseMoveEvent-> position().x() - event->position().x();
+//             deltaY = lastMouseMoveEvent->position().y() - event->position().y();
+//         }
+//         else {
+//             deltaX = lastMouseClickEvent-> position().x() - event-> position().x();
+//             deltaY = lastMouseClickEvent->position().y() - event->position().y();
+//         }
+//         lastMouseMoveEvent = new QMouseEvent(*event);
+//         m_renderer->updatePan(deltaX, deltaY);
+//     }
+//     qDebug() << "Mouse Move" << event;*/
 }
 
 void TraceDisplay::mouseReleaseEvent(QMouseEvent *event)
@@ -1008,7 +1008,7 @@ void TraceDisplayRenderer::paint()
 
 void TraceDisplayRenderer::doubleClickEvent(int x,int y)
 {
-    Q_UNUSED(x);
+    // Q_UNUSED(x);
 
     if (m_selectedTrace.isEmpty()){
         // currently no trace selected

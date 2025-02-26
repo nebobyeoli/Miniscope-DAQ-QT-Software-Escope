@@ -214,7 +214,7 @@ void VideoDevice::createView()
         QObject::connect(vidDisplay, &VideoDisplay::newAddTraceROISignal, this, &VideoDevice::handleAddNewTraceROI);
 
         QObject::connect(view, &NewQuickView::closing, deviceStream, &VideoStreamOCV::stopSteam);
-        QObject::connect(vidDisplay->window(), &QQuickWindow::beforeRendering, this, &VideoDevice::sendNewFrame);
+        QObject::connect(vidDisplay->window(), &QQuickWindow::afterRendering, this, &VideoDevice::sendNewFrame);
 
         sendMessage(m_deviceName + " is connected.");
 

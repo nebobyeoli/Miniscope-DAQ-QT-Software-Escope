@@ -92,7 +92,8 @@ TraceDisplay::TraceDisplay()
 void TraceDisplay::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        lastMouseClickEvent = new QMouseEvent(*event);
+        // lastMouseClickEvent = new QMouseEvent(*event);
+        lastMouseMoveEvent = nullptr;
     }
 //    qDebug() << "Mouse Press" << event;
 }
@@ -251,7 +252,7 @@ void TraceDisplay::handleWindowChanged(QQuickWindow *win)
         // If we allow QML to do the clearing, they would clear what we paint
         // and nothing would show.
 //! [3]
-        win->setClearBeforeRendering(false);
+        // win->setClearBeforeRendering(false);
     }
 }
 
@@ -261,7 +262,7 @@ void TraceDisplay::sync()
         m_renderer = new TraceDisplayRenderer(nullptr, window()->size() * window()->devicePixelRatio(), m_softwareStartTime);
 //        m_renderer->setShowSaturation(m_showSaturation);
 //        m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
-        connect(window(), &QQuickWindow::beforeRendering, m_renderer, &TraceDisplayRenderer::paint, Qt::DirectConnection);
+        connect(window(), &QQuickWindow::afterRendering, m_renderer, &TraceDisplayRenderer::paint, Qt::DirectConnection);
 
         for (int i=0; i < m_tempTraces.length(); i++) {
             m_renderer->addNewTrace(m_tempTraces[i]);
@@ -992,7 +993,7 @@ void TraceDisplayRenderer::paint()
 
 //    // Not strictly needed for this example, but generally useful for when
 //    // mixing with raw OpenGL.
-    m_window->resetOpenGLState();
+    // m_window->resetOpenGLState();
 
 }
 

@@ -270,7 +270,7 @@ void TraceDisplay::sync()
 //        m_renderer->setShowSaturation(m_showSaturation);
 //        m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
 
-        // qt 6 error: disable paint() function test
+        // qt 6 issue: QQuick api changed (need alternatives for setClearBeforeRendering(false) and resetOpenGLState())
         connect(window(), &QQuickWindow::beforeRendering, m_renderer, &TraceDisplayRenderer::paint, Qt::DirectConnection);
 
         for (int i=0; i < m_tempTraces.length(); i++) {

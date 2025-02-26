@@ -952,7 +952,7 @@ void TrackerDisplay::sync()
         m_renderer->overlaySkeletonEnabled = m_overlaySkeletonEnabled;
     }
     m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-//    m_renderer->setT(m_t);
+    m_renderer->setT(m_t);
 //    m_renderer->setDisplayFrame(m_displayFrame);
     m_renderer->setWindow(window());
 }

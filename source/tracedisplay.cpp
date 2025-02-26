@@ -278,7 +278,7 @@ void TraceDisplay::sync()
         }
     }
     m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-//    m_renderer->setT(m_t);
+    m_renderer->setT(m_t);
 //    m_renderer->setDisplayFrame(m_displayFrame);
     m_renderer->setWindow(window());
 }

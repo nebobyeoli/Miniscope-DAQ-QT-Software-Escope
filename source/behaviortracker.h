@@ -55,8 +55,10 @@ class TrackerDisplayRenderer : public QObject, protected QOpenGLFunctions
 public:
     TrackerDisplayRenderer(QObject *parent = nullptr, QSize displayWindowSize = QSize());
     ~TrackerDisplayRenderer();
+
     void initPrograms();
 
+    void setT(qreal t) { m_t = t; }
     void setViewportSize(const QSize &size) { m_viewportSize = size; }
     void setWindow(QQuickWindow *window) { m_window = window; }
 
@@ -105,9 +107,9 @@ class TrackerDisplay : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(qreal t READ t WRITE setT NOTIFY tChanged)
+    QML_ELEMENT
 public:
     TrackerDisplay();
-
 
     qreal t() const { return m_t; }
     void setT(qreal t);

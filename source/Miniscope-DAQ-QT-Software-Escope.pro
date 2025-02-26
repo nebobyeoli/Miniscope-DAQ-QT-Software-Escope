@@ -3,6 +3,10 @@
 QT += qml quick widgets gui core
 CONFIG += c++11
 
+CONFIG += qmltypes
+QML_IMPORT_NAME = VideoDisplay
+QML_IMPORT_MAJOR_VERSION = 1
+
 #QT += 3dcore
 
 # The following define makes your compiler emit warnings if you use

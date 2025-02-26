@@ -3,6 +3,7 @@
 #include <QtQuick/qquickwindow.h>
 #include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLContext>
+#include <QtCore/QRunnable>
 #include <QtOpenGL/QOpenGLTexture>
 
 #include <QImage>
@@ -83,6 +84,21 @@ void VideoDisplay::cleanup()
     }
 }
 
+class CleanupJob : public QRunnable
+{
+public:
+    CleanupJob(VideoDisplayRenderer *renderer) : m_renderer(renderer) { }
+    void run() override { delete m_renderer; }
+private:
+    VideoDisplayRenderer *m_renderer;
+};
+
+void VideoDisplay::releaseResources()
+{
+    window()->scheduleRenderJob(new CleanupJob(m_renderer), QQuickWindow::BeforeSynchronizingStage);
+    m_renderer = nullptr;
+}
+
 VideoDisplayRenderer::~VideoDisplayRenderer()
 {
     delete m_program;
@@ -99,10 +115,11 @@ void VideoDisplay::sync()
         // m_renderer->setDisplayFrame(QImage("C:/Users/DBAharoni/Pictures/Miniscope/Logo/1.png"));
         
         // qt 6 issue: QQuick api changed (need alternatives for setClearBeforeRendering(false) and resetOpenGLState())
-        connect(window(), &QQuickWindow::beforeRendering, m_renderer, &VideoDisplayRenderer::paint, Qt::DirectConnection);
+        connect(window(), &QQuickWindow::beforeRendering, m_renderer, &VideoDisplayRenderer::init, Qt::DirectConnection);
+        connect(window(), &QQuickWindow::beforeRenderPassRecording, m_renderer, &VideoDisplayRenderer::paint, Qt::DirectConnection);
     }
     m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-    // m_renderer->setT(m_t);
+    m_renderer->setT(m_t);
     // m_renderer->setDisplayFrame(m_displayFrame);
     m_renderer->setWindow(window());
 }
@@ -188,10 +205,14 @@ void VideoDisplay::setAddTraceROI(QList<int> roi)
     emit addTraceROIChanged();
 }
 
-void VideoDisplayRenderer::paint()
+//! [4] 
+void VideoDisplayRenderer::init()
 {
     // qDebug() << "Painting!";
     if (!m_program) {
+        QSGRendererInterface *rif = m_window->rendererInterface();
+        Q_ASSERT(rif->graphicsApi() == QSGRendererInterface::OpenGL);
+
         initializeOpenGLFunctions();
 
         m_program = new QOpenGLShaderProgram();
@@ -209,8 +230,11 @@ void VideoDisplayRenderer::paint()
 
 
     }
-//! [4] //! [5]
+}
 
+//! [4] //! [5]
+void VideoDisplayRenderer::paint()
+{
     m_texture->bind(0);
 
     m_program->bind();

@@ -175,6 +175,7 @@ class TraceDisplay : public QQuickItem
     Q_PROPERTY(QList<QVariant > ySelectedLabel READ ySelectedLabel WRITE setYSelectedLabel NOTIFY ySelectedLabelChanged)
     Q_PROPERTY(QList<QVariant > traceNames READ traceNames WRITE setTraceNames NOTIFY traceNamesChanged)
     Q_PROPERTY(qreal t READ t WRITE setT NOTIFY tChanged)
+    QML_ELEMENT
 
 public:
     TraceDisplay();
@@ -194,8 +195,10 @@ public:
     void setXLabel(QList<QVariant > label) {m_xLabel = label; emit xLabelChanged();}
     void setYSelectedLabel(QList<QVariant > label) {m_ySelectedLabel = label; emit ySelectedLabelChanged();}
     void setTraceNames(QList<QVariant > names) {m_traceNames = names; emit traceNamesChanged();}
+    
     qreal t() const { return m_t; }
     void setT(qreal t);
+
     void addNewTrace(trace_t newTrace);
     void updateYSelectLabels();
 

@@ -2,6 +2,7 @@
 #define VIDEODISPLAY_H
 
 #include <QtQuick/QQuickItem>
+#include <QtQuick/QQuickWindow>
 #include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLFunctions>
 #include <QtOpenGL/QOpenGLTexture>
@@ -21,6 +22,7 @@ public:
         m_displayFrame(nullptr),
         m_program(nullptr),
         m_texture(nullptr),
+        m_window(nullptr),
         m_alpha(1),
         m_beta(0),
         m_showStaturation(1)
@@ -42,15 +44,16 @@ signals:
     void requestNewFrame();
 
 public slots:
+    void init();
     void paint();
 
 private:
     QSize m_viewportSize;
-    qreal m_t;
+    qreal m_t; //= 0.0;
     QImage m_displayFrame;
-    QOpenGLShaderProgram *m_program;
+    QOpenGLShaderProgram *m_program; //= nullptr;
     QOpenGLTexture *m_texture;
-    QQuickWindow *m_window;
+    QQuickWindow *m_window; //= nullptr;
 
 
     double m_alpha;
@@ -69,7 +72,9 @@ class VideoDisplay : public QQuickItem
     Q_PROPERTY(double droppedFrameCount READ droppedFrameCount WRITE setDroppedFrameCount NOTIFY droppedFrameCountChanged)
     Q_PROPERTY(int bufferUsed READ bufferUsed WRITE setBufferUsed NOTIFY bufferUsedChanged)
     Q_PROPERTY(int maxBuffer READ maxBuffer WRITE setMaxBuffer NOTIFY maxBufferChanged)
+
     Q_PROPERTY(qreal t READ t WRITE setT NOTIFY tChanged)
+    QML_ELEMENT
 //    Q_PROPERTY(QImage displayFrame READ displayFrame WRITE setDisplayFrame NOTIFY displayFrameChanged)
 
     // For visualizing ROI
@@ -78,11 +83,14 @@ class VideoDisplay : public QQuickItem
 
 public:
     VideoDisplay();
+
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     qreal t() const { return m_t; }
+    void setT(qreal t);
+
     double acqFPS() const { return m_acqFPS; }
     QList<int> ROI() const { return m_ROI; }
     QList<int> addTraceROI() const { return m_addTraceROI; }
@@ -91,7 +99,6 @@ public:
     int droppedFrameCount() const {return m_droppedFrameCount; }
 
 //    QImage displayFrame() { return m_displayFrame2; }
-    void setT(qreal t);
     void setAcqFPS(double acqFPS) { m_acqFPS = acqFPS; acqFPSChanged();}
     void setROI(QList<int> roi);
     void setAddTraceROI(QList<int> roi);
@@ -128,6 +135,8 @@ private slots:
     void handleWindowChanged(QQuickWindow *win);
 
 private:
+    void releaseResources() override;
+
     qreal m_t;
     double m_acqFPS;
     int m_bufferUsed;

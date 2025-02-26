@@ -132,9 +132,10 @@ backEnd::backEnd(QObject *parent) :
     for (int i=0; i < supportedDevices.length(); i++) {
         initDisplayMessage.append("\t" + supportedDevices[i] + "\n");
     }
+    qDebug() << "initDisplayMessage:" << initDisplayMessage;
     initDisplayMessage.append("More information on the devices can be found in /deviceConfigs/videoDevices.json.\n\n");
     initDisplayMessage.append("Available compression Codecs on your computer are:\n\t" + m_availableCodecList +
-                              "\n\nUnavailable compression Codes on your computer are:\n\t" + tempStr.chopped(2));
+                              "\n\nUnavailable compression Codes on your computer are:\n\t" + (tempStr.length() ? tempStr.chopped(2) : ""));
 
     setUserConfigDisplay(initDisplayMessage);
 
@@ -1007,6 +1008,14 @@ void backEnd::testCodecSupport()
     QVector<QString> possibleCodec({"DIB", "MJPG", "MJ2C", "XVID", "FFV1", "DX50", "FLV1", "H264", "I420","MPEG","mp4v", "0000", "LAGS", "ASV1", "GREY"});
 
     for (int i = 0; i < possibleCodec.length(); i++) {
+        // test printing if cv::VideoWriter::fourcc fails
+        // qDebug() << "loading" << i << possibleCodec[i].toStdString();
+        // qDebug() << possibleCodec[i].toStdString();
+        // qDebug() << cv::VideoWriter::fourcc(
+        //     possibleCodec[i].toStdString()[0], possibleCodec[i].toStdString()[1],
+        //     possibleCodec[i].toStdString()[2], possibleCodec[i].toStdString()[3]);
+        // testVid.open("test.avi", -1,20, cv::Size(640, 480), true);
+
         testVid.open(
             "test.avi", cv::VideoWriter::fourcc(
                 possibleCodec[i].toStdString()[0], possibleCodec[i].toStdString()[1],
@@ -1019,10 +1028,13 @@ void backEnd::testCodecSupport()
             qDebug() << "Codec" << possibleCodec[i] << "supported for color";
             testVid.release();
         }
-        else
+        else {
+            qDebug() << "Codec unavailable:" << possibleCodec[i] << i;
             unAvailableCodec.append(possibleCodec[i]);
+        }
     }
 
+    qDebug() << "m_availableCodec:" << m_availableCodec;
 }
 
 bool backEnd::checkUserConfigForIssues()

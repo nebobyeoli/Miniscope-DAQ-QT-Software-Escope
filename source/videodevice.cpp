@@ -71,7 +71,7 @@ VideoDevice::VideoDevice(QObject *parent, QJsonObject ucDevice, qint64 softwareS
     //deviceStream->setIsColor(m_cDevice["isColor"].toBool(false));
     deviceStream->setIsColor(true);
 
-    qDebug() << m_ucDevice;
+    qDebug() << "m_ucDevice:" << m_ucDevice;
     if (m_ucDevice.contains("deviceID") && !m_ucDevice["deviceID"].isNull()) {
         qDebug() << "Camera" << m_ucDevice["deviceID"].toInt();
         m_camConnected = deviceStream->connect2Camera(m_ucDevice["deviceID"].toInt());

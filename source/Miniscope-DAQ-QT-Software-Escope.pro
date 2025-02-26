@@ -85,18 +85,24 @@ DISTFILES += \
 
 win32 {
     # Path to your openCV .lib file(s)
-    LIBS += -LC:/opencv4.10.0_MinGW\install\x64\mingw\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d
+    LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #for debug
+    LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\lib -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #for debug
+    # LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\bin -lopencv_core4100 -lopencv_highgui4100 -lopencv_imgproc4100 -lopencv_imgcodecs4100 -lopencv_videoio4100  #for release (option 1)
+    # LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\lib -lopencv_core4100 -lopencv_highgui4100 -lopencv_imgproc4100 -lopencv_imgcodecs4100 -lopencv_videoio4100  #for release (option 1)
+    # LIBS += -LC:\OpenCV4.10.0\opencv\build\x64\vc16\lib -lopencv_world4100  #for release (option 2)
+    #LIBS += -LC:/opencv4.10.0_MinGW\install\x64\mingw\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #previous setting for debug, now unused
 
     # Path to openCV header files
-    INCLUDEPATH += C:/opencv4.10.0_MinGW/install/include
+    INCLUDEPATH += C:\OpenCV4.10.0_MSVC\install\include
+    #INCLUDEPATH += C:/opencv4.10.0_MinGW/install/include
 
     # For Python
-    INCLUDEPATH += C:/Python/Python311/include
-    LIBS += -LC:/Python/Python311/libs -lpython311
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/include
+    LIBS += -LC:\Users\User\AppData\Local\Programs\Python\Python311/libs -lpython311 -lpython311_d
 
     # For numpy
-    INCLUDEPATH += C:/Python/Python311/Lib/site-packages/numpy
-    INCLUDEPATH += C:/Python/Python311/Lib/site-packages/numpy/_core/include
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/Lib/site-packages/numpy
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/Lib/site-packages/numpy/_core/include
 
 } else {
     CONFIG += link_pkgconfig

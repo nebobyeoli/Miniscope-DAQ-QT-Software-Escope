@@ -59,6 +59,9 @@ Thumbs.db
 *.vcxproj
 *vcxproj.*
 
+# Visual Studio Code generated files
+.vscode
+
 # MinGW generated files
 *.Debug
 *.Release
@@ -67,10 +70,16 @@ Thumbs.db
 *.pyc
 
 # Builds
-build-*
+# build-*
+build*
 
 # Binaries
 # --------
 *.dll
 *.exe
 
+# My User Configs saved test files
+My User Configs/*_2025*.json
+
+# test folder
+webcamTest/

@@ -1,3 +1,16 @@
+# Qt5 원본 코드 branch
+
+`Desktop Qt 5.15.18 MSVC2019 64bit` 설정으로 빌드 및 구동 성공하게 수정된 코드
+
+**Qt5 정상구동 프로젝트 다운로드 방법:**
+
+- 브랜치 `Qt5(upstream-master)-testing` 선택 &rarr; `Commits` &rarr; `MSVC debug, release 모드 사용 가능하게 코드 수정` 문구로 커밋된 항목에서 `Browse repository at this point` (`<>` 표시) &rarr; `<> Code` &rarr; `Download ZIP`
+
+- 이 브랜치의 이후 수정 내역에는 오류 재구현하는 테스트 코드도 포함되어 있어, 레포지토리/브랜치 메인페이지에서 `<> Code` &rarr; `Download ZIP`으로 그냥 설치하면 구동 시 화면이 제대로 안 나올 수 있음
+
+<br>
+<br>
+
 # DEPRECATION NOTICE
 
 This software is reaching its end of life, and we are in the process of consolidating and rearchitecting miniscope IO software as an SDK with minimal I/O functionality for all miniscopes - [`miniscope-io`](https://github.com/Aharoni-Lab/miniscope-io) and a yet-to-be-started GUI built on top of that. 
@@ -8,7 +21,7 @@ These issues are tracking the update:
 - [ ] [Reproducible Builds](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/issues/61)
 - [ ] [Update to Qt6](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/issues/62)
 
-# Miniscope-DAQ-QT-Software
+# [Miniscope-DAQ-QT-Software](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software)
 
 **[[Miniscope V4 Wiki](https://github.com/Aharoni-Lab/Miniscope-v4/wiki)] [[Miniscope DAQ Software Wiki](https://github.com/Aharoni-Lab/Miniscope-DAQ-QT-Software/wiki)] [[Miniscope DAQ Firmware Wiki](https://github.com/Aharoni-Lab/Miniscope-DAQ-Cypress-firmware/wiki)] [[Miniscope Wire-Free DAQ Wiki](https://github.com/Aharoni-Lab/Miniscope-Wire-Free-DAQ/wiki)] [[Miniscope-LFOV Wiki](https://github.com/Aharoni-Lab/Miniscope-LFOV/wiki)][[2021 Virtual Miniscope Workshop Recording](https://sites.google.com/metacell.us/miniscope-workshop-2021)]**
 

@@ -1,7 +1,7 @@
-QT += qml quick widgets
+QT += qml quick widgets gui core
 CONFIG += c++11
 
-QT += 3dcore
+#QT += 3dcore
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -73,12 +73,30 @@ DISTFILES += \
 
 win32 {
     # Path to your openCV .lib file(s)
-    LIBS += -LC:/opencv-4.4.0/build/lib/Release -lopencv_world440
-
-#    LIBS += -LC:/opencv-4.4.0/build/lib/Debug -lopencv_world440d
+    LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #for debug
+    LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\lib -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #for debug
+    # LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\bin -lopencv_core4100 -lopencv_highgui4100 -lopencv_imgproc4100 -lopencv_imgcodecs4100 -lopencv_videoio4100  #for release (option 1)
+    # LIBS += -LC:\OpenCV4.10.0_MSVC\install\x64\vc17\lib -lopencv_core4100 -lopencv_highgui4100 -lopencv_imgproc4100 -lopencv_imgcodecs4100 -lopencv_videoio4100  #for release (option 1)
+    # LIBS += -LC:\OpenCV4.10.0\opencv\build\x64\vc16\lib -lopencv_world4100  #for release (option 2)
+    #LIBS += -LC:/opencv4.10.0_MinGW\install\x64\mingw\bin -lopencv_core4100d -lopencv_highgui4100d -lopencv_imgproc4100d -lopencv_imgcodecs4100d -lopencv_videoio4100d  #previous setting for debug, now unused
 
     # Path to openCV header files
-    INCLUDEPATH += C:/opencv-4.4.0/build/install/include
+    INCLUDEPATH += C:\OpenCV4.10.0_MSVC\install\include
+    #INCLUDEPATH += C:/opencv4.10.0_MinGW/install/include
+
+    # For Python
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/include
+    LIBS += -LC:\Users\User\AppData\Local\Programs\Python\Python311/libs -lpython311 -lpython311_d
+
+    # For numpy
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/Lib/site-packages/numpy
+    INCLUDEPATH += C:\Users\User\AppData\Local\Programs\Python\Python311/Lib/site-packages/numpy/_core/include
+
+
+
+
+    #INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/include
+    #LIBS += -LC:/Users/dbaha/.conda/envs/basepy37/libs -lpython37
 
     # Do we need DEPENDPATH ????
 #    #DEPENDPATH +=
@@ -89,16 +107,6 @@ win32 {
 
 #    LIBS += -LC:/libusb-1.0.23/MS64/dll/ -llibusb-1.0
 #    INCLUDEPATH += C:/libusb-1.0.23/include/libusb-1.0
-
-    # For Python
-#    INCLUDEPATH += C:/Python38/include
-#    LIBS += -LC:/Python38/libs -lpython38
-
-    INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/include
-    LIBS += -LC:/Users/dbaha/.conda/envs/basepy37/libs -lpython37
-
-    # For numpy
-    INCLUDEPATH += C:/Users/dbaha/.conda/envs/basepy37/Lib/site-packages/numpy/core/include
 
 } else {
     CONFIG += link_pkgconfig

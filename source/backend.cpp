@@ -87,7 +87,10 @@ backEnd::backEnd(QObject *parent) :
     QString jsonFile;
     QJsonObject jObj;
     QStringList supportedDevices;
-    file.setFileName("deviceConfigs/videoDevices.json");
+    
+    // file.setFileName("deviceConfigs/videoDevices.json");
+    file.setFileName(QCoreApplication::applicationDirPath() + "/deviceConfigs/videoDevices.json");
+    
     bool status = file.open(QIODevice::ReadOnly | QIODevice::Text);
     if (status == true) {
         jsonFile = file.readAll();
@@ -323,12 +326,14 @@ QStandardItem *backEnd::handleJsonArray(QStandardItem *parent, QJsonArray arry, 
 {
 //    QStringList keys = obj.keys();
 //    type = type.right(6);
-    type = type.right(type.length() - 6);
-    type = type.chopped(1);
-    qDebug() << "TYPE" << type;
-    if (type != "String" && type != "Bool" && type != "Integer" && type != "Double" && type != "Number" && type != "Object" && type.left(5) != "Array") {
+    if (type.length() != 0) {
+        type = type.right(type.length() - 6);
+        type = type.chopped(1);
         qDebug() << "TYPE" << type;
-        type = "String";
+        if (type != "String" && type != "Bool" && type != "Integer" && type != "Double" && type != "Number" && type != "Object" && type.left(5) != "Array") {
+            qDebug() << "TYPE" << type;
+            type = "String";
+        }
     }
 
     for (int i=0; i < arry.size(); i++) {

@@ -48,11 +48,12 @@ backEnd::backEnd(QObject *parent) :
     m_jsonTreeModel(new QStandardItemModel())
 {
 #ifdef DEBUG
+    qDebug() << "ifdef DEBUG running";
 //    QString homePath = QDir::homePath();
     QDir dir;
     qDebug()<< "current path : "<<dir.currentPath();
-    QDir::setCurrent("C:/Escope/Miniscope-DAQ-QT-V5V6-attempt/source");
-    qDebug() <<"set current path to: " <<dir.currentPath();
+    // QDir::setCurrent("C:/Escope/Miniscope-DAQ-QT-Software-Escope/source");
+    // qDebug() <<"set current path to: " <<dir.currentPath();
     // m_userConfigFileName = "C:/Escope/QT_Software_V5/build/release/colortest2/deviceConfigs/userConfigEscope1.json"; //"./userConfigs/UserConfigEscope1.json";
     m_userConfigFileName = "./userConfigs/UserConfigEscope1.json";
     loadUserConfigFile();
